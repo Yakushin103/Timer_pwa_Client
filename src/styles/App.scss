@@ -1,0 +1,235 @@
+@use 'mixins';
+
+.app {
+  width: 100%;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  background: linear-gradient(to bottom, #5988e3, #684497);
+
+  color: #fff;
+
+  .__show-on-wide {
+    display: none;
+
+    @media only screen and (min-width: 1000.55px) {
+      display: flex;
+    }
+  }
+
+  .__show-on-tablet {
+    display: none;
+
+    @media only screen and (max-width: 1000.55px) and (min-width: 680.55px) {
+      display: flex;
+    }
+  }
+
+  .__show-on-mobile {
+    display: none;
+
+    @media only screen and (max-width: 680.55px) {
+      display: flex;
+    }
+  }
+
+  .content {
+    width: calc(100% - 30px);
+    height: 100%;
+
+    padding: 15px;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  button {
+    cursor: pointer;
+
+    &:active {
+      transform: scale(1.02);
+    }
+  }
+
+  .row {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    &.sb {
+      justify-content: space-between;
+    }
+
+    &.gap {
+      gap: 10px;
+    }
+
+    &.flex-end {
+      justify-content: flex-end;
+    }
+
+    .field {
+      width: 100%;
+
+      display: flex;
+      align-items: center;
+
+      gap: 10px;
+
+      span {
+        display: block;
+
+        min-width: 100px;
+        width: 100px;
+      }
+
+      input {
+        width: 100%;
+      }
+    }
+
+    .title {
+      font-weight: bold;
+    }
+  }
+
+  .row-action {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    button {
+      white-space: nowrap;
+    }
+  }
+
+  button.white {
+    width: fit-content;
+
+    padding: 7px 15px;
+
+    border-radius: 5px;
+    border: 1px solid #fff;
+
+    background-color: inherit;
+
+    color: #fff;
+
+    cursor: pointer;
+
+    &.save {
+      color: mixins.$green_color;
+      border-color: mixins.$green_color;
+    }
+
+    &.delete {
+      color: mixins.$red_color;
+      border-color: mixins.$red_color;
+    }
+  }
+
+  button:disabled,
+  button[disabled] {
+    opacity: mixins.$opacity_value;
+
+    cursor: inherit;
+  }
+
+  .table {
+    width: 100%;
+
+    border: 1px solid #fff;
+    border-radius: 5px;
+    border-collapse: collapse;
+
+    color: #fff;
+
+    tr th,
+    tr td {
+      border: 1px solid #fff;
+
+      padding: 5px 15px;
+
+      .action {
+        width: 100%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        cursor: pointer;
+
+        svg {
+          width: 20px;
+          min-width: 20px;
+          height: 20px;
+
+          fill: #fff;
+        }
+
+        &.edit {
+          svg {
+            fill: mixins.$yellow_color;
+          }
+        }
+
+        &.delete {
+          svg {
+            fill: mixins.$red_color;
+          }
+        }
+
+        &.save {
+          svg {
+            fill: mixins.$green_color;
+          }
+        }
+      }
+    }
+  }
+
+  .input-text,
+  .input-text-add {
+    appearance: none;
+    -webkit-appearance: none;
+    background: inherit;
+
+    border: none;
+
+    color: #ffff;
+
+    font-size: 16px;
+
+    &:focus {
+      border: none;
+      outline: none;
+    }
+
+    &:active {
+      border: none;
+      outline: none;
+    }
+  }
+
+  .input-text-add {
+    border: 1px solid #fff;
+    border-radius: 5px;
+
+    padding: 5px 15px;
+
+    &:focus {
+      border: 1px solid #fff;
+      outline: none;
+    }
+
+    &:active {
+      border: 1px solid #fff;
+      outline: none;
+    }
+  }
+}

@@ -1,0 +1,30 @@
+.main-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .button-start {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    button {
+      width: 100px;
+      height: 100px;
+
+      border: 1px solid #fff;
+      border-radius: 50%;
+
+      color: #fff;
+      font-size: 24px;
+
+      background-color: inherit;
+
+      cursor: pointer;
+
+      &:active {
+        transform: scale(1.02);
+      }
+    }
+  }
+}

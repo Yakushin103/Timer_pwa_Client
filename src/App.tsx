@@ -1,36 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import appLogo from '/favicon.svg'
-import PWABadge from './PWABadge.tsx'
-import './App.css'
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
+
+import NavMenu from './components/NavMenu'
+
+import MainPage from './pages/Main/Index'
+import ReportPage from './pages/Report/Index'
+import SettingsPage from './pages/Settings/Index'
+
+import { getCompanyStoreApi } from './api/companyApi'
+
+import './styles/App.scss'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const location = useLocation()
+
+  useEffect(() => {
+    getStore()
+  }, [])
+
+  async function getStore() {
+    try {
+      const response = await getCompanyStoreApi()
+
+    } catch (error) { }
+  }
+
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={appLogo} className="logo" alt="Timer PWA logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Timer PWA</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-      <PWABadge />
-    </>
+    <div className="app">
+      {
+        location.pathname === '/' &&
+        <MainPage />
+      }
+
+      {
+        location.pathname === '/report' &&
+        <ReportPage />
+      }
+
+      {
+        location.pathname === '/settings' &&
+        <SettingsPage />
+      }
+
+
+      <NavMenu />
+    </div>
   )
 }
 

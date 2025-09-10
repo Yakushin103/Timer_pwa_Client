@@ -1,0 +1,38 @@
+.timer {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  .time {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 10px;
+
+    color: #fff;
+
+    position: relative;
+
+    span.time-value {
+      width: 70px;
+
+      font-size: 100px;
+
+      text-align: center;
+    }
+
+    span.time-popup {
+      opacity: .6;
+
+      position: absolute;
+
+      top: 30px;
+      right: 5px;
+    }
+  }
+}
