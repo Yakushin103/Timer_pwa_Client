@@ -1,11 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { getCompanyListApi } from "../api/companyApi";
 
 // import { httpClientUpdate } from "../funcs";
 
-import {
-  setAccessToken,
-  setUser,
-} from "./reducer";
+import { setAccessToken, setCompanies, setUser } from "./reducer";
 
 type ArgProps = {
   accessToken: string | null;
@@ -19,7 +17,6 @@ export const signOut = createAsyncThunk(
       // let response = await httpClientUpdate.post("/logout");
       // if (response.status === 200) {
       //   delete httpClientUpdate.defaults.headers["Authorization"];
-
       //   dispatch(setUser(null));
       //   dispatch(setAccessToken(null));
       // }
@@ -27,6 +24,21 @@ export const signOut = createAsyncThunk(
       // delete httpClientUpdate.defaults.headers["Authorization"];
       dispatch(setUser(null));
       dispatch(setAccessToken(null));
+    }
+  }
+);
+
+export const updatedCompanyListThunk = createAsyncThunk(
+  "company/updated",
+  async (arg: '', { dispatch }) => {
+    try {
+      const { success, data } = await getCompanyListApi();
+
+      if (success) {
+        dispatch(setCompanies(data));
+      }
+    } catch (error) {
+      dispatch(setCompanies([]));
     }
   }
 );

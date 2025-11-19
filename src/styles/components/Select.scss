@@ -1,0 +1,157 @@
+.select {
+  position: relative;
+  min-width: 200px;
+
+  .select-title-name {
+    text-align: center;
+
+    font-size: 9pt;
+    line-height: 20px;
+
+    color: #fff;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    span {
+      width: 100%;
+      height: 1px;
+
+      display: block;
+
+      background-color: #fff;
+    }
+
+    .select-title-name-text {
+      white-space: nowrap;
+    }
+  }
+
+  &.multi {
+    .select-btn-row {
+      width: calc(100% - 8px);
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 4px;
+
+      padding: 4px;
+
+      .select-btn-items {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .select-btn-button {
+        display: flex;
+        align-items: center;
+
+        gap: 4px;
+
+        padding: 2px 4px;
+
+        border-radius: 2px;
+        border: 1px solid rgba(240, 240, 240, 1);
+
+        background: rgba(245, 245, 245, 1);
+
+        .close-icon {
+          display: flex;
+        }
+      }
+    }
+
+    .options-list-wrapper {
+      width: 100%;
+      border: 1px solid #fff;
+    }
+  }
+
+  button.select-btn {
+    min-height: 24px;
+    width: 100%;
+    border: 1px solid #fff;
+    border-radius: 2px;
+
+    background: inherit;
+
+    display: flex;
+    align-items: center;
+
+    cursor: pointer;
+
+    span {
+      font-size: 16px;
+      white-space: nowrap;
+
+      color: #fff;
+
+      padding: 0px 16px;
+
+      border-right: 1px solid #fff;
+    }
+
+    svg {
+      padding: 0px 0 0px 5px;
+
+      width: 12px;
+      height: 12px;
+
+      fill: #fff;
+    }
+
+  }
+
+  .options-list-wrapper {
+    position: absolute;
+    right: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    z-index: 9;
+
+    max-height: 400px;
+    width: 100%;
+
+    overflow: auto;
+    border: 1px solid #fff;
+
+    button,
+    .button {
+      // border: 1px solid mixins.$border_select_color;
+      // border-radius: 2px;
+      border: none;
+
+      text-align: right;
+
+      background: inherit;
+
+      color: #fff;
+      padding: 5px 12px;
+      font-size: 16px;
+      transition: .21s;
+
+      &:hover {
+        background: #ccc;
+      }
+
+      &.__active {
+        background: #FF0000;
+        // color: mixins.$main_color_black_mode;
+      }
+
+      span.active_filter {
+        margin-right: 5px;
+
+        // color: mixins.$red_color;
+      }
+    }
+  }
+}

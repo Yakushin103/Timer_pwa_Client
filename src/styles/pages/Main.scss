@@ -1,3 +1,5 @@
+@use '../mixins';
+
 .main-page {
   display: flex;
   flex-direction: column;
@@ -7,6 +9,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
+    gap: 10px;
 
     button {
       width: 100px;
@@ -24,6 +28,24 @@
 
       &:active {
         transform: scale(1.02);
+      }
+
+      &.save {
+        border-color: mixins.$green_color;
+
+        color: mixins.$green_color;
+      }
+
+      &.clear {
+        border-color: mixins.$red_color;
+
+        color: mixins.$red_color;
+      }
+
+      &.resume {
+        border-color: mixins.$yellow_color;
+
+        color: mixins.$yellow_color;
       }
     }
   }

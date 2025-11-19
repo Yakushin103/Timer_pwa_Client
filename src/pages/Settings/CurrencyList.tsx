@@ -83,98 +83,102 @@ export default function CurrencyList({ handlePage }: CurrencyListProps) {
         {
           list &&
           <table className="table">
-            <tr>
-              <th>Name</th>
-              <th>Short Name</th>
-              <th>Edit</th>
-              <th>Delete</th>
-            </tr>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Short Name</th>
+                <th>Edit</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
 
-            {
-              list.map(item => (
-                <tr key={item.id}>
-                  <td>
-                    {
-                      edit && edit.id === item.id ?
-                        <input
-                          type="text"
-                          className="input-text"
-                          value={edit.name}
-                          onChange={(event) => setEdit({ ...edit, name: event.target.value })}
-                        /> :
-                        item.name
-                    }
-                  </td>
+            <tbody>                                                                                                                                                                                                                                                                                    
+              {
+                list.map(item => (
+                  <tr key={item.id}>
+                    <td>
+                      {
+                        edit && edit.id === item.id ?
+                          <input
+                            type="text"
+                            className="input-text"
+                            value={edit.name}
+                            onChange={(event) => setEdit({ ...edit, name: event.target.value })}
+                          /> :
+                          item.name
+                      }
+                    </td>
 
-                  <td>
-                    {
-                      edit && edit.id === item.id ?
-                        <input
-                          type="text"
-                          className="input-text"
-                          value={edit.short_name}
-                          onChange={(event) => setEdit({ ...edit, short_name: event.target.value })}
-                        /> :
-                        item.short_name
-                    }
-                  </td>
+                    <td>
+                      {
+                        edit && edit.id === item.id ?
+                          <input
+                            type="text"
+                            className="input-text"
+                            value={edit.short_name}
+                            onChange={(event) => setEdit({ ...edit, short_name: event.target.value })}
+                          /> :
+                          item.short_name
+                      }
+                    </td>
 
-                  <td>
-                    {
-                      !!edit && edit.id === item.id &&
-                      <div
-                        className="action save"
-                        onClick={() => editCurrency()}
-                      >
-                        <Icon
-                          icon="save-1"
-                        />
-                      </div>
-                    }
+                    <td>
+                      {
+                        !!edit && edit.id === item.id &&
+                        <div
+                          className="action save"
+                          onClick={() => editCurrency()}
+                        >
+                          <Icon
+                            icon="save-1"
+                          />
+                        </div>
+                      }
 
-                    {
-                      !edit &&
-                      <div
-                        className="action edit"
-                        onClick={() => setEdit(item)}
-                      >
-                        <Icon
-                          icon="pencil-1"
-                        />
-                      </div>
-                    }
-                  </td>
+                      {
+                        !edit &&
+                        <div
+                          className="action edit"
+                          onClick={() => setEdit(item)}
+                        >
+                          <Icon
+                            icon="pencil-1"
+                          />
+                        </div>
+                      }
+                    </td>
 
-                  <td>
-                    {
-                      !!edit && edit.id === item.id &&
-                      <div
-                        className="action delete"
-                        onClick={() => setEdit(null)}
-                      >
-                        <Icon
-                          icon="delete-1"
-                          viewBox="0 0 128 128"
-                        />
-                      </div>
-                    }
+                    <td>
+                      {
+                        !!edit && edit.id === item.id &&
+                        <div
+                          className="action delete"
+                          onClick={() => setEdit(null)}
+                        >
+                          <Icon
+                            icon="delete-1"
+                            viewBox="0 0 128 128"
+                          />
+                        </div>
+                      }
 
-                    {
-                      !edit &&
-                      <div
-                        className="action delete"
-                        onClick={() => deleteCurrency(item.id)}
-                      >
-                        <Icon
-                          icon="delete-1"
-                          viewBox="0 0 128 128"
-                        />
-                      </div>
-                    }
-                  </td>
-                </tr>
-              ))
-            }
+                      {
+                        !edit &&
+                        <div
+                          className="action delete"
+                          onClick={() => deleteCurrency(item.id)}
+                        >
+                          <Icon
+                            icon="delete-1"
+                            viewBox="0 0 128 128"
+                          />
+                        </div>
+                      }
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
           </table>
         }
       </div>

@@ -7,12 +7,16 @@ import MainPage from './pages/Main/Index'
 import ReportPage from './pages/Report/Index'
 import SettingsPage from './pages/Settings/Index'
 
-import { getCompanyStoreApi } from './api/companyApi'
+import { getCompanyListApi } from './api/companyApi'
+import { useAppDispatch } from './store/hooks'
+import { setCompanies } from './store/reducer'
 
 import './styles/App.scss'
 
 function App() {
   const location = useLocation()
+
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     getStore()
@@ -20,9 +24,17 @@ function App() {
 
   async function getStore() {
     try {
-      const response = await getCompanyStoreApi()
+      const { success, data } = await getCompanyListApi()
 
-    } catch (error) { }
+      if (success) {
+        dispatch(setCompanies(data))
+      } else {
+        dispatch(setCompanies([]))
+      }
+
+    } catch (error) {
+      dispatch(setCompanies([]))
+    }
   }
 
 

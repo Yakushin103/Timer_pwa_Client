@@ -45,3 +45,8 @@ export interface NewPaymentMethodProps {
   description: string;
   period: string;
 }
+
+export interface CompaniesListOptionsProps {
+  currency_options: CurrencyProps[];
+  payment_method_options: PaymentMethodProps[];
+}
