@@ -55,9 +55,6 @@ export default function AddCompany({ handlePage }: AddCompanyProps) {
     })
   }
 
-  console.log('data', data);
-
-
   return (
     <div className="companies-list">
       <div className="row sb">

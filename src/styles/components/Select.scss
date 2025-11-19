@@ -123,6 +123,8 @@
     overflow: auto;
     border: 1px solid #fff;
 
+    background: linear-gradient(45deg, black, transparent);
+
     button,
     .button {
       // border: 1px solid mixins.$border_select_color;

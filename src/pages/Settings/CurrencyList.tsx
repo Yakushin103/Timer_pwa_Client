@@ -92,7 +92,7 @@ export default function CurrencyList({ handlePage }: CurrencyListProps) {
               </tr>
             </thead>
 
-            <tbody>                                                                                                                                                                                                                                                                                    
+            <tbody>
               {
                 list.map(item => (
                   <tr key={item.id}>

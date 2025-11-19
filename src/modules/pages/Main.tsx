@@ -5,3 +5,12 @@ export interface DataProps {
   hours: number,
   company_id: number,
 }
+
+export interface DataUpdatedProps {
+  day: string,
+  seconds: number,
+  minutes: number,
+  hours: number,
+  company_id: number,
+  id: number
+}

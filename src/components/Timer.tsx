@@ -3,6 +3,8 @@ import { useStopwatch } from 'react-timer-hook';
 
 import { TimerProps } from '../modules/components/Timer';
 
+import { getFormat } from '../utils/funcs';
+
 import '../styles/components/Timer.scss'
 
 export default function Timer({ isStart, data, setData }: TimerProps) {
@@ -34,19 +36,6 @@ export default function Timer({ isStart, data, setData }: TimerProps) {
       reset(undefined, false)
     }
   }, [data])
-
-  function getFormat(value: number) {
-    let string = ''
-
-    if (value >= 10) {
-      string = value.toString()
-    } else {
-      string = `0${value}`
-    }
-
-    return string
-  }
-
 
   return (
     <div className='timer'>
