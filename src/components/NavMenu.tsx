@@ -54,7 +54,10 @@ export default function NavMenu() {
       </div>
 
       <div className="__show-on-tablet nav">
-        <button>
+        <button
+          className={classNames({ _active: location.pathname === '/' })}
+          onClick={() => handleNavigate('')}
+        >
           Your time
 
           <Icon
@@ -63,7 +66,10 @@ export default function NavMenu() {
           />
         </button>
 
-        <button>
+        <button
+          className={classNames({ _active: location.pathname === '/report' })}
+          onClick={() => handleNavigate('report')}
+        >
           List
 
           <Icon
@@ -72,7 +78,10 @@ export default function NavMenu() {
           />
         </button>
 
-        <button>
+        <button
+          className={classNames({ _active: location.pathname === '/settings' })}
+          onClick={() => handleNavigate('settings')}
+        >
           Settings
 
           <Icon
@@ -83,21 +92,30 @@ export default function NavMenu() {
       </div>
 
       <div className="__show-on-mobile nav">
-        <button>
+        <button
+          className={classNames({ _active: location.pathname === '/' })}
+          onClick={() => handleNavigate('')}
+        >
           <Icon
             viewBox="0 0 48 48"
             icon="time-1"
           />
         </button>
 
-        <button>
+        <button
+          className={classNames({ _active: location.pathname === '/report' })}
+          onClick={() => handleNavigate('report')}
+        >
           <Icon
             viewBox="0 0 48 48"
             icon="report-1"
           />
         </button>
 
-        <button>
+        <button
+          className={classNames({ _active: location.pathname === '/settings' })}
+          onClick={() => handleNavigate('settings')}
+        >
           <Icon
             viewBox="0 0 128 128"
             icon="settings-1"

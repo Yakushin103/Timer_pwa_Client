@@ -131,9 +131,21 @@
 
   .table-row {
     width: 100%;
+    max-height: 600px;
+
+    overflow: auto;
+
+    border: 1px solid #fff;
 
     &.mt {
       margin-top: 30px;
+    }
+
+    .table thead tr {
+      position: sticky;
+      top: 0;
+
+      background: #5988e3;
     }
   }
 

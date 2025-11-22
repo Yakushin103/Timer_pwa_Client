@@ -35,44 +35,42 @@ export default function Index() {
 
   async function saveTime() {
     if (report.length && data.company_id) {
-      if (report.length && data.company_id) {
-        let day = ''
-        let hours = 0
-        let minutes = 0
-        let seconds = 0
-        let id = 0
+      let day = ''
+      let hours = 0
+      let minutes = 0
+      let seconds = 0
+      let id = 0
 
-        report.forEach(item => {
-          if (item.company_id === data.company_id) {
-            day = item.day
-            hours = data.hours + item.hours
-            minutes = data.minutes + item.minutes
-            seconds = data.seconds + item.seconds
-            id = item.id
-          }
-        })
-
-        const { success } = await updatedTimeApi({
-          ...data,
-          day,
-          hours,
-          minutes,
-          seconds,
-          id,
-        })
-
-        if (success) {
-          handleClearTime()
+      report.forEach(item => {
+        if (item.company_id === data.company_id) {
+          day = item.day
+          hours = data.hours + item.hours
+          minutes = data.minutes + item.minutes
+          seconds = data.seconds + item.seconds
+          id = item.id
         }
-      } else {
-        const { success } = await addTimeApi({
-          ...data,
-          day: moment().format('DD-MM-YYYY'),
-        })
+      })
 
-        if (success) {
-          handleClearTime()
-        }
+      const { success } = await updatedTimeApi({
+        ...data,
+        day,
+        hours,
+        minutes,
+        seconds,
+        id,
+      })
+
+      if (success) {
+        handleClearTime()
+      }
+    } else {
+      const { success } = await addTimeApi({
+        ...data,
+        day: moment().format('DD-MM-YYYY'),
+      })
+
+      if (success) {
+        handleClearTime()
       }
     }
   }
