@@ -1,11 +1,14 @@
 import { useState } from 'react'
 
 import CompaniesList from './CompaniesList'
-import AddCompany from './AddCompany'
 import CurrencyList from './CurrencyList'
-import AddCurrency from './AddCurrency'
 import PaymentMethodList from './PaymentMethodList'
+import ReportsList from './ReportsList'
+
+import AddCompany from './AddCompany'
+import AddCurrency from './AddCurrency'
 import AddPaymentMethod from './AddPaymentMethod'
+import AddReport from './AddReport'
 
 import '../../styles/pages/Settings.scss'
 
@@ -40,6 +43,13 @@ export default function Index() {
           >
             Payment Method
           </button>
+
+          <button
+            className='white'
+            onClick={() => handlePage('reports')}
+          >
+            Reports
+          </button>
         </div>
       }
 
@@ -73,6 +83,15 @@ export default function Index() {
         <AddPaymentMethod handlePage={handlePage} />
       }
 
+      {
+        page === 'reports' &&
+        <ReportsList handlePage={handlePage} />
+      }
+
+      {
+        page === 'add_report' &&
+        <AddReport handlePage={handlePage} />
+      }
     </>
   )
 }

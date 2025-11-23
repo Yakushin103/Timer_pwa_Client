@@ -50,3 +50,11 @@ export interface CompaniesListOptionsProps {
   currency_options: CurrencyProps[];
   payment_method_options: PaymentMethodProps[];
 }
+
+export interface ReportsListProps {
+  handlePage: (value: string) => void;
+}
+
+export interface AddReportProps {
+  handlePage: (value: string) => void;
+}

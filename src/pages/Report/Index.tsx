@@ -15,7 +15,7 @@ import { ItemStoreProps } from "../../modules/api/Timer"
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function Index() {
-  const companyOprions = useAppSelector((store) => store.companies)
+  const companyOptions = useAppSelector((store) => store.companies)
 
   const [filters, setFilters] = useState({
     company_id: 0,
@@ -99,7 +99,7 @@ export default function Index() {
   function getCompanyName(id: number) {
     let name = ''
 
-    companyOprions.forEach(item => {
+    companyOptions.forEach(item => {
       if (item.id === id) {
         name = item.name
       }
@@ -151,7 +151,7 @@ export default function Index() {
         <div>
           <SelectIdsComponent
             id={filters.company_id}
-            options={companyOprions.map(option => {
+            options={companyOptions.map(option => {
               return {
                 id: option.id,
                 name: option.name
@@ -297,7 +297,7 @@ export default function Index() {
 
             <SelectIdsComponent
               id={addTime.company_id}
-              options={companyOprions.map(option => {
+              options={companyOptions.map(option => {
                 return {
                   id: option.id,
                   name: option.name
