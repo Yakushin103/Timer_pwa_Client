@@ -38,7 +38,7 @@ export default function AddCurrency({ handlePage }: AddCurrencyProps) {
   }
   return (
     <div className="companies-list">
-      <div className="row sb">
+      <div className="row-buttons sb">
         <div className="title">New Currency</div>
 
         <button
@@ -73,7 +73,7 @@ export default function AddCurrency({ handlePage }: AddCurrencyProps) {
         </div>
       </div>
 
-      <div className="row gap flex-end">
+      <div className="row-buttons gap flex-end">
         <button
           className="white delete"
           disabled={data.name === '' || data.short_name === ''}

@@ -42,7 +42,7 @@ export default function AddPaymentMethod({ handlePage }: AddPaymentMethodProps) 
   }
   return (
     <div className="companies-list">
-      <div className="row sb">
+      <div className="row-buttons sb">
         <div className="title">New Payment Method</div>
 
         <button
@@ -90,7 +90,7 @@ export default function AddPaymentMethod({ handlePage }: AddPaymentMethodProps) 
         </div>
       </div>
 
-      <div className="row gap flex-end">
+      <div className="row-buttons gap flex-end">
         <button
           className="white delete"
           disabled={data.name === '' || data.period === ''}

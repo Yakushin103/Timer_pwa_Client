@@ -157,7 +157,7 @@ export default function AddReport({ handlePage }: AddReportProps) {
 
   return (
     <div className="companies-list">
-      <div className="row sb">
+      <div className="row-buttons sb">
         <div className="title">New Report</div>
 
         <button
@@ -238,7 +238,7 @@ export default function AddReport({ handlePage }: AddReportProps) {
         </div>
       }
 
-      <div className="row gap flex-end">
+      <div className="row-buttons gap flex-end">
         <button
           className="white delete"
           disabled={(!data.start_date && !data.end_date) || !data.company_id || !data.payout}

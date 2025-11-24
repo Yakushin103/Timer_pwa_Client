@@ -58,7 +58,7 @@ export default function AddCompany({ handlePage }: AddCompanyProps) {
 
   return (
     <div className="companies-list">
-      <div className="row sb">
+      <div className="row-buttons sb">
         <div className="title">New Company</div>
 
         <button
@@ -125,7 +125,7 @@ export default function AddCompany({ handlePage }: AddCompanyProps) {
         </div>
       </div>
 
-      <div className="row gap flex-end">
+      <div className="row-buttons gap flex-end">
         <button
           className="white delete"
           disabled={!data.name && !data.short_name && !data.currency_id && !data.payment_method_id}

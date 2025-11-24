@@ -59,7 +59,7 @@ export default function PaymentMethodList({ handlePage }: PaymentMethodListProps
 
   return (
     <div className="companies-list">
-      <div className="row sb">
+      <div className="row-buttons sb">
         <div className="title">All Payment Method</div>
 
         <div className="row-action">

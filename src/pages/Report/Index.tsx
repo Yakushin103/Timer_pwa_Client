@@ -176,31 +176,153 @@ export default function Index() {
         The total time is {total}
       </div>
 
-      <div className="table-row mt">
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Time</th>
-              <th>Company</th>
-              <th>Edit</th>
-              <th>Remove</th>
-            </tr>
-          </thead>
+      <div className="__show-on-wide">
+        <div className="table-row mt">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Company</th>
+                <th>Edit</th>
+                <th>Remove</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            {
-              report.map(item => (
-                <tr
-                  key={item.id}
-                  className={classNames({ _active: item.id === editTime.id })}
-                >
-                  <td> {item.day} </td>
-                  <td> {getTime(item.hours, item.minutes, item.seconds)} </td>
-                  <td> {getCompanyName(item.company_id)} </td>
-                  <td>
-                    {
-                      !addTime.is_open &&
+            <tbody>
+              {
+                report.map(item => (
+                  <tr
+                    key={item.id}
+                    className={classNames({ _active: item.id === editTime.id })}
+                  >
+                    <td> {item.day} </td>
+                    <td> {getTime(item.hours, item.minutes, item.seconds)} </td>
+                    <td> {getCompanyName(item.company_id)} </td>
+                    <td>
+                      {
+                        !addTime.is_open &&
+                        <div
+                          className="action edit"
+                          onClick={() => handleEditTime(item.id, item.hours, item.minutes, item.seconds)}
+                        >
+                          <Icon
+                            icon="pencil-1"
+                          />
+                        </div>
+                      }
+                    </td>
+                    <td>
+                      {
+                        !addTime.is_open &&
+                        <div
+                          className="action delete"
+                          onClick={() => handleRemoveTime(item.id)}
+                        >
+                          <Icon
+                            icon="delete-1"
+                            viewBox="0 0 128 128"
+                          />
+                        </div>
+                      }
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="__show-on-tablet">
+        <div className="table-row mt">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Company</th>
+                <th>Edit</th>
+                <th>Remove</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {
+                report.map(item => (
+                  <tr
+                    key={item.id}
+                    className={classNames({ _active: item.id === editTime.id })}
+                  >
+                    <td> {item.day} </td>
+                    <td> {getTime(item.hours, item.minutes, item.seconds)} </td>
+                    <td> {getCompanyName(item.company_id)} </td>
+                    <td>
+                      {
+                        !addTime.is_open &&
+                        <div
+                          className="action edit"
+                          onClick={() => handleEditTime(item.id, item.hours, item.minutes, item.seconds)}
+                        >
+                          <Icon
+                            icon="pencil-1"
+                          />
+                        </div>
+                      }
+                    </td>
+                    <td>
+                      {
+                        !addTime.is_open &&
+                        <div
+                          className="action delete"
+                          onClick={() => handleRemoveTime(item.id)}
+                        >
+                          <Icon
+                            icon="delete-1"
+                            viewBox="0 0 128 128"
+                          />
+                        </div>
+                      }
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="__show-on-mobile">
+        <div className='table-mobile mt'>
+          {
+            report.map(item => (
+              <div key={item.id} className="item">
+                <div className="left">
+                  <div className='row-mobile'>
+                    <span className='name'>Day:</span>
+
+                    <span className='value'> {item.day} </span>
+                  </div>
+
+                  <div className='row-mobile'>
+                    <span className='name'>Time:</span>
+
+                    <span className='value'> {getTime(item.hours, item.minutes, item.seconds)} </span>
+                  </div>
+
+                  <div className='row-mobile'>
+                    <span className='name'>Company:</span>
+
+                    <span className='value'> {getCompanyName(item.company_id)} </span>
+                  </div>
+                </div>
+
+                <div className="right">
+                  {
+                    !addTime.is_open &&
+                    <div className='row-mobile'>
+                      <span className='name'>Pay:</span>
+
                       <div
                         className="action edit"
                         onClick={() => handleEditTime(item.id, item.hours, item.minutes, item.seconds)}
@@ -209,11 +331,14 @@ export default function Index() {
                           icon="pencil-1"
                         />
                       </div>
-                    }
-                  </td>
-                  <td>
-                    {
-                      !addTime.is_open &&
+                    </div>
+                  }
+
+                  {
+                    !addTime.is_open &&
+                    <div className='row-mobile'>
+                      <span className='name'>Delete:</span>
+
                       <div
                         className="action delete"
                         onClick={() => handleRemoveTime(item.id)}
@@ -223,13 +348,13 @@ export default function Index() {
                           viewBox="0 0 128 128"
                         />
                       </div>
-                    }
-                  </td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
+                    </div>
+                  }
+                </div>
+              </div>
+            ))
+          }
+        </div>
       </div>
 
       {
@@ -360,7 +485,7 @@ export default function Index() {
 
       {
         addTime.is_open &&
-        <div className="row gap flex-end mt">
+        <div className="row-buttons gap flex-end mt">
           <button
             className="white delete"
             onClick={() => handleCancelAdd()}
