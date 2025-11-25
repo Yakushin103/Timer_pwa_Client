@@ -66,3 +66,11 @@ export interface UsersListProps {
 export interface AddUserProps {
   handlePage: (value: string) => void;
 }
+
+export interface RolesListProps {
+  handlePage: (value: string) => void;
+}
+
+export interface AddRolesProps {
+  handlePage: (value: string) => void;
+}

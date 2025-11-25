@@ -5,12 +5,14 @@ import CurrencyList from './CurrencyList'
 import PaymentMethodList from './PaymentMethodList'
 import ReportsList from './ReportsList'
 import UsersList from './UsersList'
+import RolesList from './RolesList'
 
 import AddCompany from './AddCompany'
 import AddCurrency from './AddCurrency'
 import AddPaymentMethod from './AddPaymentMethod'
 import AddReport from './AddReport'
 import AddUser from './AddUser'
+import AddRole from './AddRole'
 
 import '../../styles/pages/Settings.scss'
 
@@ -61,7 +63,24 @@ function Index() {
           >
             Users
           </button>
+
+          <button
+            className='white'
+            onClick={() => handlePage('roles_list')}
+          >
+            Roles
+          </button>
         </div>
+      }
+
+      {
+        page === 'roles_list' &&
+        <RolesList handlePage={memoizedHandlePage} />
+      }
+
+      {
+        page === 'add_role' &&
+        <AddRole handlePage={memoizedHandlePage} />
       }
 
       {
