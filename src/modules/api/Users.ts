@@ -2,6 +2,7 @@ export interface GetStoreApiResponse {
   success: boolean;
   data: StoreDataItem[];
   total_time: string;
+  message: string;
 }
 
 export interface StoreDataItem {
@@ -26,5 +27,16 @@ export interface DataAddUserProps {
 
 export interface AddUserApiResponse {
   success: boolean;
+  message: string;
+}
+
+export interface SingInDataProps {
+  login: string;
+  password: string;
+}
+
+export interface SingInApiResponse {
+  success: boolean;
+  token: string;
   message: string;
 }

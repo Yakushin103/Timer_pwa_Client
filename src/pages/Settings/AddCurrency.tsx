@@ -3,6 +3,7 @@ import { memo, useState } from "react";
 import { addCurrencyApi } from "../../api/currencyApi";
 import { useAppDispatch } from "../../store/hooks";
 import { setLoading } from "../../store/reducer";
+import { errorSignOut } from "../../store/thunk";
 
 import { AddCurrencyProps, NewCurrencyProps } from "../../modules/pages/Settings";
 
@@ -24,15 +25,19 @@ function AddCurrency({ handlePage }: AddCurrencyProps) {
   async function handleAddCurrency() {
     dispatch(setLoading(true))
     try {
-      const { success } = await addCurrencyApi(data)
+      const { success, message } = await addCurrencyApi(data)
 
       if (success) {
         handlePage('currency_list')
       } else {
-        setData({
-          name: '',
-          short_name: '',
-        })
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        } else {
+          setData({
+            name: '',
+            short_name: '',
+          })
+        }
       }
       dispatch(setLoading(false))
     } catch (error) {

@@ -5,6 +5,7 @@ import SelectIdsComponent from '../../components/Select'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { addReportApi, getReportSettingsStoreApi, getReportsStoreApi } from '../../api/reportsApi'
 import { setLoading } from '../../store/reducer'
+import { errorSignOut } from '../../store/thunk'
 
 import { AddReportProps } from '../../modules/pages/Settings'
 
@@ -46,7 +47,7 @@ function AddReport({ handlePage }: AddReportProps) {
     dispatch(setLoading(true))
 
     try {
-      const { success, min_date, max_date } = await getReportsStoreApi()
+      const { success, min_date, max_date, message } = await getReportsStoreApi()
 
       if (success) {
         setFilters({
@@ -54,10 +55,14 @@ function AddReport({ handlePage }: AddReportProps) {
           max_date: !!max_date ? max_date : filters.max_date,
         })
       } else {
-        setFilters({
-          min_date: '',
-          max_date: '',
-        })
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        } else {
+          setFilters({
+            min_date: '',
+            max_date: '',
+          })
+        }
       }
 
       dispatch(setLoading(false))
@@ -73,7 +78,7 @@ function AddReport({ handlePage }: AddReportProps) {
   async function getStoreWithFilters() {
     dispatch(setLoading(true))
     try {
-      const { success, total_hours, total_payout, min_date, max_date } = await getReportSettingsStoreApi(data.company_id, data.start_date, data.end_date)
+      const { success, total_hours, total_payout, min_date, max_date, message } = await getReportSettingsStoreApi(data.company_id, data.start_date, data.end_date)
 
       if (success) {
         setTotal({
@@ -85,7 +90,11 @@ function AddReport({ handlePage }: AddReportProps) {
           max_date,
         })
       } else {
-        handleClear()
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        } else {
+          handleClear()
+        }
       }
 
       dispatch(setLoading(true))
@@ -99,11 +108,15 @@ function AddReport({ handlePage }: AddReportProps) {
   async function handleAddReport() {
     dispatch(setLoading(true))
     try {
-      const { success } = await addReportApi(data)
+      const { success, message } = await addReportApi(data)
       if (success) {
         handlePage('reports')
       } else {
-        handleClear()
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        } else {
+          handleClear()
+        }
       }
 
       dispatch(setLoading(true))

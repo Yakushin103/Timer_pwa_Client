@@ -5,6 +5,7 @@ import Icon from '../../components/Icon'
 import { deleteUserApi, getStoreApi } from '../../api/usersApi'
 import { useAppDispatch } from '../../store/hooks'
 import { setLoading } from '../../store/reducer'
+import { errorSignOut } from '../../store/thunk'
 
 import { UsersListProps } from '../../modules/pages/Settings'
 import { StoreDataItem } from '../../modules/api/Users'
@@ -21,12 +22,16 @@ function UsersList({ handlePage }: UsersListProps) {
   async function getStore() {
     dispatch(setLoading(true))
     try {
-      const { success, data } = await getStoreApi()
+      const { success, data, message } = await getStoreApi()
 
       if (success) {
         setReport(data)
       } else {
-        setReport([])
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        } else {
+          setReport([])
+        }
       }
 
       dispatch(setLoading(false))
@@ -40,13 +45,17 @@ function UsersList({ handlePage }: UsersListProps) {
     dispatch(setLoading(true))
 
     try {
-      const { success } = await deleteUserApi(id)
+      const { success, message } = await deleteUserApi(id)
 
       if (success) {
         getStore()
 
       } else {
-        getStore()
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        } else {
+          getStore()
+        }
       }
     } catch (error) {
       getStore()

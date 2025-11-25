@@ -3,6 +3,7 @@ import { CurrencyProps } from "../pages/Settings";
 export interface GetCurrencyStoreRespose {
   success: boolean;
   data: CurrencyProps[];
+  message: string;
 }
 
 export interface DeleteCurrencyRespose {

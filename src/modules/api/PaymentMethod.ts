@@ -3,6 +3,7 @@ import { PaymentMethodProps } from "../pages/Settings";
 export interface GetPaymentMethodStoreRespose {
   success: boolean;
   data: PaymentMethodProps[];
+  message: string
 }
 
 export interface DeletePaymentMethodRespose {

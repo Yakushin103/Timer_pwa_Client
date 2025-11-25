@@ -4,6 +4,8 @@ import {
   AddUserApiResponse,
   DataAddUserProps,
   GetStoreApiResponse,
+  SingInApiResponse,
+  SingInDataProps,
 } from "../modules/api/Users";
 
 export async function getStoreApi() {
@@ -26,4 +28,20 @@ export async function deleteUserApi(id: number) {
       params: { id },
     })
     .then((response) => response.data as GetStoreApiResponse);
+}
+
+export async function singInApi(data: SingInDataProps) {
+  return await instance
+    .post("/api/users/sing_in", {
+      params: { ...data },
+    })
+    .then((response) => {
+      if (response.data.success) {
+        instance.defaults.headers.common = {
+          Authorization: `Bearer ${response.data.token}`,
+        };
+      }
+
+      return response.data as SingInApiResponse;
+    });
 }

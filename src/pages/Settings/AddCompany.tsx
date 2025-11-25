@@ -6,7 +6,7 @@ import { addCompanyStoreApi, getCompanyStoreApi } from "../../api/companyApi";
 import { useAppDispatch } from "../../store/hooks";
 
 import { AddCompanyProps, CompaniesListOptionsProps } from "../../modules/pages/Settings";
-import { updatedCompanyListThunk } from "../../store/thunk";
+import { errorSignOut, updatedCompanyListThunk } from "../../store/thunk";
 import { setLoading } from "../../store/reducer";
 
 function AddCompany({ handlePage }: AddCompanyProps) {
@@ -31,10 +31,14 @@ function AddCompany({ handlePage }: AddCompanyProps) {
   async function getStore() {
     dispatch(setLoading(true))
     try {
-      const { success, data } = await getCompanyStoreApi()
+      const { success, data, message } = await getCompanyStoreApi()
 
       if (success) {
         setOptions(data)
+      } else {
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        }
       }
 
       dispatch(setLoading(false))
@@ -46,10 +50,14 @@ function AddCompany({ handlePage }: AddCompanyProps) {
   async function handleAddCompany() {
     dispatch(setLoading(true))
     try {
-      const { success } = await addCompanyStoreApi(data)
+      const { success, message } = await addCompanyStoreApi(data)
       if (success) {
         dispatch(updatedCompanyListThunk(''))
         handlePage('companies_list')
+      } else {
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        }
       }
 
       dispatch(setLoading(false))

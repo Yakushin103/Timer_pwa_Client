@@ -5,6 +5,7 @@ import Icon from '../../components/Icon'
 import { deleteRoleApi, getStoreApi } from '../../api/rolesApi'
 import { useAppDispatch } from '../../store/hooks'
 import { setLoading } from '../../store/reducer'
+import { errorSignOut } from '../../store/thunk'
 
 import { RolesListProps } from '../../modules/pages/Settings'
 import { StoreDataItem } from '../../modules/api/Roles'
@@ -21,12 +22,16 @@ function RolesList({ handlePage }: RolesListProps) {
   async function getStore() {
     dispatch(setLoading(true))
     try {
-      const { success, data } = await getStoreApi()
+      const { success, data, message } = await getStoreApi()
 
       if (success) {
         setReport(data)
       } else {
-        setReport([])
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        } else {
+          setReport([])
+        }
       }
 
       dispatch(setLoading(false))
@@ -40,13 +45,17 @@ function RolesList({ handlePage }: RolesListProps) {
     dispatch(setLoading(true))
 
     try {
-      const { success } = await deleteRoleApi(id)
+      const { success, message } = await deleteRoleApi(id)
 
       if (success) {
         getStore()
 
       } else {
-        getStore()
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        } else {
+          getStore()
+        }
       }
     } catch (error) {
       getStore()

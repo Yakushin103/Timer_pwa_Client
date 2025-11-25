@@ -5,6 +5,7 @@ import SelectIdsComponent from "../../components/Select";
 import { addUserApi } from "../../api/usersApi";
 import { useAppDispatch } from "../../store/hooks";
 import { setLoading } from "../../store/reducer";
+import { errorSignOut } from "../../store/thunk";
 
 import { AddUserProps } from "../../modules/pages/Settings";
 
@@ -38,18 +39,22 @@ function AddUser({ handlePage }: AddUserProps) {
   async function handleAddUser() {
     dispatch(setLoading(true))
     try {
-      const { success } = await addUserApi(data)
+      const { success, message } = await addUserApi(data)
 
       if (success) {
         handlePage('users_list')
       } else {
-        setData({
-          first_name: '',
-          last_name: '',
-          login: '',
-          password: '',
-          role_id: 0,
-        })
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        } else {
+          setData({
+            first_name: '',
+            last_name: '',
+            login: '',
+            password: '',
+            role_id: 0,
+          })
+        }
       }
 
       dispatch(setLoading(false))

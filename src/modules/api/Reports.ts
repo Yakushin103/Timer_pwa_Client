@@ -5,6 +5,7 @@ export interface GetReportsStoreResponse {
   max_date: string;
   total_hours: string;
   total_payout: string;
+  message: string;
 }
 
 export interface ReportDataProps {

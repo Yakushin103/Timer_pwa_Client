@@ -7,8 +7,10 @@ import moment from 'moment'
 import SelectIdsComponent from '../../components/Select'
 import Timer from '../../components/Timer'
 
-import { useAppSelector } from '../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { addTimeApi, getStoreApi, updatedTimeApi } from '../../api/timerApi'
+import { errorSignOut } from '../../store/thunk'
+import { instance } from '../../api/instance'
 
 import { DataProps } from '../../modules/pages/Main'
 import { ItemStoreProps } from '../../modules/api/Timer'
@@ -16,7 +18,10 @@ import { ItemStoreProps } from '../../modules/api/Timer'
 import '../../styles/pages/Main.scss'
 
 export default function Index() {
+  const dispatch = useAppDispatch()
+
   const companyOprions = useAppSelector((store) => store.companies)
+  const accessToken = useAppSelector((store) => store.accessToken)
 
   const [isStart, setIsStart] = useState(false)
 
@@ -51,7 +56,7 @@ export default function Index() {
         }
       })
 
-      const { success } = await updatedTimeApi({
+      const { success, message } = await updatedTimeApi({
         ...data,
         day,
         hours,
@@ -62,15 +67,23 @@ export default function Index() {
 
       if (success) {
         handleClearTime()
+      } else {
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        }
       }
     } else {
-      const { success } = await addTimeApi({
+      const { success, message } = await addTimeApi({
         ...data,
         day: moment().format('DD-MM-YYYY'),
       })
 
       if (success) {
         handleClearTime()
+      } else {
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        }
       }
     }
   }
@@ -78,10 +91,21 @@ export default function Index() {
 
   async function getStore() {
     let date = moment().format('DD-MM-YYYY')
-    const { success, data } = await getStoreApi(date)
+
+    if ( !!accessToken ) {
+      instance.defaults.headers.common = {
+        Authorization: `Bearer ${accessToken}`,
+      };
+    }
+
+    const { success, data, message } = await getStoreApi(date)
 
     if (success) {
       setReport(data)
+    } else {
+      if (message === 'Authorization is required') {
+        dispatch(errorSignOut(''))
+      }
     }
   }
 

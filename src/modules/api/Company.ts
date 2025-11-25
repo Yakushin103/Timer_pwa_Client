@@ -3,6 +3,7 @@ import { CurrencyProps, PaymentMethodProps } from "../pages/Settings";
 export interface GetCompanyListResponse {
   success: boolean;
   data: CompanyProps[];
+  message: string;
 }
 
 export interface CompanyProps {
@@ -22,6 +23,7 @@ export interface GetCompanyStoreResponse {
     currency_options: CurrencyProps[];
     payment_method_options: PaymentMethodProps[];
   };
+  message: string;
 }
 
 export interface AddCompanyProps {
@@ -33,8 +35,10 @@ export interface AddCompanyProps {
 
 export interface AddCompanyResponse {
   success: boolean;
+  message: string;
 }
 
 export interface DeleteCompanyResponse {
   success: boolean;
+  message: string;
 }

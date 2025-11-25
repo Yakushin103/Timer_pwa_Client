@@ -5,6 +5,7 @@ import Icon from "../../components/Icon";
 import { deletePaymentMethodApi, editPaymentMethodApi, getPaymentMethodStoreApi } from "../../api/paymentMethodApi";
 import { useAppDispatch } from "../../store/hooks";
 import { setLoading } from "../../store/reducer";
+import { errorSignOut } from "../../store/thunk";
 
 import { PaymentMethodListProps, PaymentMethodProps } from "../../modules/pages/Settings";
 
@@ -22,11 +23,15 @@ function PaymentMethodList({ handlePage }: PaymentMethodListProps) {
   async function getStore() {
     dispatch(setLoading(true))
     try {
-      const { success, data } = await getPaymentMethodStoreApi()
+      const { success, data, message } = await getPaymentMethodStoreApi()
 
       if (success) {
         setList(data)
       } else {
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        }
+
         setList([])
       }
 
@@ -40,11 +45,15 @@ function PaymentMethodList({ handlePage }: PaymentMethodListProps) {
   async function deletePaymentMethod(id: number) {
     dispatch(setLoading(true))
     try {
-      const { success } = await deletePaymentMethodApi(id)
+      const { success, message } = await deletePaymentMethodApi(id)
 
       if (success) {
         getStore()
       } else {
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        }
+
         dispatch(setLoading(false))
       }
     } catch (error) {
@@ -57,12 +66,16 @@ function PaymentMethodList({ handlePage }: PaymentMethodListProps) {
     dispatch(setLoading(true))
     try {
       if (edit) {
-        const { success } = await editPaymentMethodApi(edit)
+        const { success, message } = await editPaymentMethodApi(edit)
 
         if (success) {
           setEdit(null)
           getStore()
         } else {
+          if (message === 'Authorization is required') {
+            dispatch(errorSignOut(''))
+          }
+
           dispatch(setLoading(false))
         }
       }

@@ -6,6 +6,7 @@ import Icon from '../../components/Icon'
 import { deleteReportApi, getReportsStoreApi, payReportApi } from '../../api/reportsApi'
 import { useAppDispatch } from '../../store/hooks'
 import { setLoading } from '../../store/reducer'
+import { errorSignOut } from '../../store/thunk'
 
 import { DeleteReportProps, ReportDataProps } from '../../modules/api/Reports'
 import { ReportsListProps } from '../../modules/pages/Settings'
@@ -22,11 +23,15 @@ function ReportsList({ handlePage }: ReportsListProps) {
   async function getStore() {
     dispatch(setLoading(true))
     try {
-      const { success, data } = await getReportsStoreApi()
+      const { success, data, message } = await getReportsStoreApi()
 
       if (success) {
         setReport(data)
       } else {
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        }
+
         setReport([])
       }
 
@@ -40,11 +45,15 @@ function ReportsList({ handlePage }: ReportsListProps) {
   async function deleteReport(data: DeleteReportProps) {
     dispatch(setLoading(true))
     try {
-      const { success } = await deleteReportApi(data)
+      const { success, message } = await deleteReportApi(data)
       if (success) {
         getStore()
       } else {
-        getStore()
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        } else {
+          getStore()
+        }
       }
 
       dispatch(setLoading(false))
@@ -56,11 +65,15 @@ function ReportsList({ handlePage }: ReportsListProps) {
   async function handlePayReport(id: number) {
     dispatch(setLoading(true))
     try {
-      const { success } = await payReportApi(id)
+      const { success, message } = await payReportApi(id)
       if (success) {
         getStore()
       } else {
-        getStore()
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        } else {
+          getStore()
+        }
       }
     } catch (error) {
       getStore()

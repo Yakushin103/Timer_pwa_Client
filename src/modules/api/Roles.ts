@@ -2,6 +2,7 @@ export interface GetStoreApiResponse {
   success: boolean;
   data: StoreDataItem[];
   total_time: string;
+  message: string;
 }
 
 export interface StoreDataItem {

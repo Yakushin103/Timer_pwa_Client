@@ -8,6 +8,10 @@ const router = createRouter(
       path: "/",
     },
     {
+      name: "auth",
+      path: "/auth",
+    },
+    {
       name: "reports",
       path: "/reports",
     },

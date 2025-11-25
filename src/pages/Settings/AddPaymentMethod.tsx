@@ -3,6 +3,7 @@ import { memo, useState } from "react";
 import { addPaymentMethodApi } from "../../api/paymentMethodApi";
 import { useAppDispatch } from "../../store/hooks";
 import { setLoading } from "../../store/reducer";
+import { errorSignOut } from "../../store/thunk";
 
 import { AddPaymentMethodProps, NewPaymentMethodProps } from "../../modules/pages/Settings";
 
@@ -26,16 +27,20 @@ function AddPaymentMethod({ handlePage }: AddPaymentMethodProps) {
   async function handleAddPaymentMethod() {
     dispatch(setLoading(true))
     try {
-      const { success } = await addPaymentMethodApi(data)
+      const { success, message } = await addPaymentMethodApi(data)
 
       if (success) {
         handlePage('payment_method_list')
       } else {
-        setData({
-          name: '',
-          description: '',
-          period: '',
-        })
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        } else {
+          setData({
+            name: '',
+            description: '',
+            period: '',
+          })
+        }
       }
 
       dispatch(setLoading(false))

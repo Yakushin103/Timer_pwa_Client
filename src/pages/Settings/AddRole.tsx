@@ -3,6 +3,7 @@ import { memo, useEffect, useState } from "react";
 import { addRoleApi } from "../../api/rolesApi";
 import { useAppDispatch } from "../../store/hooks";
 import { setLoading } from "../../store/reducer";
+import { errorSignOut } from "../../store/thunk";
 
 import { AddRolesProps } from "../../modules/pages/Settings";
 
@@ -27,15 +28,19 @@ function AddRole({ handlePage }: AddRolesProps) {
   async function handleAddRole() {
     dispatch(setLoading(true))
     try {
-      const { success } = await addRoleApi(data)
+      const { success, message } = await addRoleApi(data)
 
       if (success) {
         handlePage('roles_list')
       } else {
-        setData({
-          name: '',
-          short_name: '',
-        })
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        } else {
+          setData({
+            name: '',
+            short_name: '',
+          })
+        }
       }
 
       dispatch(setLoading(false))

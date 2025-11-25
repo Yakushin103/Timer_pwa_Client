@@ -6,15 +6,18 @@ import moment from "moment"
 import SelectIdsComponent from "../../components/Select"
 import Icon from "../../components/Icon"
 
-import { useAppSelector } from "../../store/hooks"
+import { useAppDispatch, useAppSelector } from "../../store/hooks"
 import { addTimeApi, deleteTimeApi, getStoreApi, updatedTimeApi } from '../../api/timerApi'
 import { getFormat } from "../../utils/funcs"
+import { errorSignOut } from "../../store/thunk"
 
 import { ItemStoreProps } from "../../modules/api/Timer"
 
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function Index() {
+  const dispatch = useAppDispatch()
+
   const companyOptions = useAppSelector((store) => store.companies)
 
   const [filters, setFilters] = useState({
@@ -43,27 +46,35 @@ export default function Index() {
   }, [filters.company_id])
 
   async function getStore() {
-    const { success, data, total_time } = await getStoreApi(filters.day, !!filters.company_id ? filters.company_id : undefined)
+    const { success, data, total_time, message } = await getStoreApi(filters.day, !!filters.company_id ? filters.company_id : undefined)
 
     if (success) {
       setReport(data)
       setTotal(total_time)
+    } else {
+      if (message === 'Authorization is required') {
+        dispatch(errorSignOut(''))
+      }
     }
   }
 
   async function handleRemoveTime(id: number) {
     try {
-      const { success } = await deleteTimeApi(id)
+      const { success, message } = await deleteTimeApi(id)
 
       if (success) {
         getStore()
+      } else {
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        }
       }
     } catch (error) { }
   }
 
   async function handleUpdatedTime() {
     try {
-      const { success } = await updatedTimeApi({
+      const { success, message } = await updatedTimeApi({
         ...editTime,
         day: '',
         company_id: 0,
@@ -72,6 +83,10 @@ export default function Index() {
       if (success) {
         getStore()
         handleCancel()
+      } else {
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        }
       }
     } catch (error) { }
   }
@@ -80,7 +95,7 @@ export default function Index() {
     try {
       let day = moment(addTime.day).format('DD-MM-YYYY')
 
-      const { success } = await addTimeApi({
+      const { success, message } = await addTimeApi({
         ...addTime,
         day,
       })
@@ -88,6 +103,10 @@ export default function Index() {
       if (success) {
         getStore()
         handleCancelAdd()
+      } else {
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        }
       }
     } catch (error) { }
   }

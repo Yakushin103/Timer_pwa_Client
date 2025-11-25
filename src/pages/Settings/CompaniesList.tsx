@@ -5,7 +5,7 @@ import SelectComponent from "../../components/Select";
 
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { deleteCompanyApi, getCompanyStoreApi } from "../../api/companyApi";
-import { updatedCompanyListThunk } from "../../store/thunk";
+import { errorSignOut, updatedCompanyListThunk } from "../../store/thunk";
 import { setLoading } from "../../store/reducer";
 
 import { CompanyProps } from "../../modules/api/Company";
@@ -29,10 +29,14 @@ function CompaniesList({ handlePage }: CompaniesListProps) {
   async function getStore() {
     dispatch(setLoading(true))
     try {
-      const { success, data } = await getCompanyStoreApi()
+      const { success, data, message } = await getCompanyStoreApi()
 
       if (success) {
         setOptions(data)
+      } else {
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        }
       }
       dispatch(setLoading(false))
     } catch (error) {
@@ -49,11 +53,16 @@ function CompaniesList({ handlePage }: CompaniesListProps) {
   async function deleteCompany(id: number) {
     dispatch(setLoading(true))
     try {
-      const { success } = await deleteCompanyApi(id)
+      const { success, message } = await deleteCompanyApi(id)
 
       if (success) {
         dispatch(updatedCompanyListThunk(''))
+      } else {
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        }
       }
+
       dispatch(setLoading(false))
     } catch (error) {
       dispatch(setLoading(false))

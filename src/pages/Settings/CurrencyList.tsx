@@ -5,6 +5,7 @@ import Icon from "../../components/Icon";
 import { deleteCurrencyApi, editCurrencyApi, getCurrencyStoreApi } from "../../api/currencyApi";
 import { useAppDispatch } from "../../store/hooks";
 import { setLoading } from "../../store/reducer";
+import { errorSignOut } from "../../store/thunk";
 
 import { CurrencyListProps, CurrencyProps } from "../../modules/pages/Settings";
 
@@ -22,12 +23,16 @@ function CurrencyList({ handlePage }: CurrencyListProps) {
   async function getStore() {
     dispatch(setLoading(true))
     try {
-      const { success, data } = await getCurrencyStoreApi()
+      const { success, data, message } = await getCurrencyStoreApi()
 
       if (success) {
         setList(data)
       } else {
-        setList([])
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        } else {
+          setList([])
+        }
       }
       dispatch(setLoading(false))
     } catch (error) {
@@ -39,11 +44,15 @@ function CurrencyList({ handlePage }: CurrencyListProps) {
   async function deleteCurrency(id: number) {
     dispatch(setLoading(true))
     try {
-      const { success } = await deleteCurrencyApi(id)
+      const { success, message } = await deleteCurrencyApi(id)
 
       if (success) {
         getStore()
       } else {
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        }
+
         dispatch(setLoading(false))
       }
     } catch (error) {
@@ -56,12 +65,16 @@ function CurrencyList({ handlePage }: CurrencyListProps) {
     dispatch(setLoading(true))
     try {
       if (edit) {
-        const { success } = await editCurrencyApi(edit)
+        const { success, message } = await editCurrencyApi(edit)
 
         if (success) {
           setEdit(null)
           getStore()
         } else {
+          if (message === 'Authorization is required') {
+            dispatch(errorSignOut(''))
+          }
+
           dispatch(setLoading(false))
         }
       }
