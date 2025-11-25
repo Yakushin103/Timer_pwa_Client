@@ -58,3 +58,11 @@ export interface ReportsListProps {
 export interface AddReportProps {
   handlePage: (value: string) => void;
 }
+
+export interface UsersListProps {
+  handlePage: (value: string) => void;
+}
+
+export interface AddUserProps {
+  handlePage: (value: string) => void;
+}

@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 
 import { addCurrencyApi } from "../../api/currencyApi";
+import { useAppDispatch } from "../../store/hooks";
+import { setLoading } from "../../store/reducer";
 
 import { AddCurrencyProps, NewCurrencyProps } from "../../modules/pages/Settings";
 
-export default function AddCurrency({ handlePage }: AddCurrencyProps) {
+function AddCurrency({ handlePage }: AddCurrencyProps) {
+  const dispatch = useAppDispatch()
+
   const [data, setData] = useState<NewCurrencyProps>({
     name: '',
     short_name: '',
@@ -18,6 +22,7 @@ export default function AddCurrency({ handlePage }: AddCurrencyProps) {
   }
 
   async function handleAddCurrency() {
+    dispatch(setLoading(true))
     try {
       const { success } = await addCurrencyApi(data)
 
@@ -29,13 +34,16 @@ export default function AddCurrency({ handlePage }: AddCurrencyProps) {
           short_name: '',
         })
       }
+      dispatch(setLoading(false))
     } catch (error) {
       setData({
         name: '',
         short_name: '',
       })
+      dispatch(setLoading(false))
     }
   }
+
   return (
     <div className="companies-list">
       <div className="row-buttons sb">
@@ -94,3 +102,5 @@ export default function AddCurrency({ handlePage }: AddCurrencyProps) {
     </div>
   )
 }
+
+export default memo(AddCurrency)

@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 
 import { addPaymentMethodApi } from "../../api/paymentMethodApi";
+import { useAppDispatch } from "../../store/hooks";
+import { setLoading } from "../../store/reducer";
 
 import { AddPaymentMethodProps, NewPaymentMethodProps } from "../../modules/pages/Settings";
 
-export default function AddPaymentMethod({ handlePage }: AddPaymentMethodProps) {
+function AddPaymentMethod({ handlePage }: AddPaymentMethodProps) {
+  const dispatch = useAppDispatch()
+
   const [data, setData] = useState<NewPaymentMethodProps>({
     name: '',
     description: '',
@@ -20,6 +24,7 @@ export default function AddPaymentMethod({ handlePage }: AddPaymentMethodProps) 
   }
 
   async function handleAddPaymentMethod() {
+    dispatch(setLoading(true))
     try {
       const { success } = await addPaymentMethodApi(data)
 
@@ -32,12 +37,15 @@ export default function AddPaymentMethod({ handlePage }: AddPaymentMethodProps) 
           period: '',
         })
       }
+
+      dispatch(setLoading(false))
     } catch (error) {
       setData({
         name: '',
         description: '',
         period: '',
       })
+      dispatch(setLoading(false))
     }
   }
   return (
@@ -111,3 +119,5 @@ export default function AddPaymentMethod({ handlePage }: AddPaymentMethodProps) 
     </div>
   )
 }
+
+export default memo(AddPaymentMethod)

@@ -1,14 +1,18 @@
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import classNames from 'classnames'
 
 import Icon from '../../components/Icon'
 
 import { deleteReportApi, getReportsStoreApi, payReportApi } from '../../api/reportsApi'
+import { useAppDispatch } from '../../store/hooks'
+import { setLoading } from '../../store/reducer'
 
 import { DeleteReportProps, ReportDataProps } from '../../modules/api/Reports'
 import { ReportsListProps } from '../../modules/pages/Settings'
 
-export default function ReportsList({ handlePage }: ReportsListProps) {
+function ReportsList({ handlePage }: ReportsListProps) {
+  const dispatch = useAppDispatch()
+
   const [report, setReport] = useState<ReportDataProps[]>([])
 
   useEffect(() => {
@@ -16,6 +20,7 @@ export default function ReportsList({ handlePage }: ReportsListProps) {
   }, [])
 
   async function getStore() {
+    dispatch(setLoading(true))
     try {
       const { success, data } = await getReportsStoreApi()
 
@@ -24,12 +29,16 @@ export default function ReportsList({ handlePage }: ReportsListProps) {
       } else {
         setReport([])
       }
+
+      dispatch(setLoading(false))
     } catch (error) {
       setReport([])
+      dispatch(setLoading(false))
     }
   }
 
   async function deleteReport(data: DeleteReportProps) {
+    dispatch(setLoading(true))
     try {
       const { success } = await deleteReportApi(data)
       if (success) {
@@ -37,12 +46,15 @@ export default function ReportsList({ handlePage }: ReportsListProps) {
       } else {
         getStore()
       }
+
+      dispatch(setLoading(false))
     } catch (error) {
       getStore()
     }
   }
 
   async function handlePayReport(id: number) {
+    dispatch(setLoading(true))
     try {
       const { success } = await payReportApi(id)
       if (success) {
@@ -321,3 +333,5 @@ export default function ReportsList({ handlePage }: ReportsListProps) {
     </div>
   )
 }
+
+export default memo(ReportsList)

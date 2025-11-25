@@ -1,13 +1,16 @@
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 
 import SelectIdsComponent from '../../components/Select'
 
-import { useAppSelector } from '../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { addReportApi, getReportSettingsStoreApi, getReportsStoreApi } from '../../api/reportsApi'
+import { setLoading } from '../../store/reducer'
 
 import { AddReportProps } from '../../modules/pages/Settings'
 
-export default function AddReport({ handlePage }: AddReportProps) {
+function AddReport({ handlePage }: AddReportProps) {
+  const dispatch = useAppDispatch()
+
   const companyOptions = useAppSelector((store) => store.companies)
 
   const [data, setData] = useState({
@@ -40,6 +43,8 @@ export default function AddReport({ handlePage }: AddReportProps) {
   }, [data.start_date, data.end_date, data.company_id])
 
   async function getStore() {
+    dispatch(setLoading(true))
+
     try {
       const { success, min_date, max_date } = await getReportsStoreApi()
 
@@ -54,15 +59,19 @@ export default function AddReport({ handlePage }: AddReportProps) {
           max_date: '',
         })
       }
+
+      dispatch(setLoading(false))
     } catch (error) {
       setFilters({
         min_date: '',
         max_date: '',
       })
+      dispatch(setLoading(true))
     }
   }
 
   async function getStoreWithFilters() {
+    dispatch(setLoading(true))
     try {
       const { success, total_hours, total_payout, min_date, max_date } = await getReportSettingsStoreApi(data.company_id, data.start_date, data.end_date)
 
@@ -78,12 +87,17 @@ export default function AddReport({ handlePage }: AddReportProps) {
       } else {
         handleClear()
       }
+
+      dispatch(setLoading(true))
     } catch (error) {
       handleClear()
+
+      dispatch(setLoading(true))
     }
   }
 
   async function handleAddReport() {
+    dispatch(setLoading(true))
     try {
       const { success } = await addReportApi(data)
       if (success) {
@@ -91,8 +105,12 @@ export default function AddReport({ handlePage }: AddReportProps) {
       } else {
         handleClear()
       }
+
+      dispatch(setLoading(true))
     } catch (error) {
       handleClear()
+
+      dispatch(setLoading(true))
     }
   }
 
@@ -258,3 +276,5 @@ export default function AddReport({ handlePage }: AddReportProps) {
     </div>
   )
 }
+
+export default memo(AddReport)

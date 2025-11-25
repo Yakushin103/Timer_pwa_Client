@@ -1,12 +1,16 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 import Icon from "../../components/Icon";
 
 import { deleteCurrencyApi, editCurrencyApi, getCurrencyStoreApi } from "../../api/currencyApi";
+import { useAppDispatch } from "../../store/hooks";
+import { setLoading } from "../../store/reducer";
 
 import { CurrencyListProps, CurrencyProps } from "../../modules/pages/Settings";
 
-export default function CurrencyList({ handlePage }: CurrencyListProps) {
+function CurrencyList({ handlePage }: CurrencyListProps) {
+  const dispatch = useAppDispatch()
+
   const [list, setList] = useState<CurrencyProps[] | null>(null)
 
   const [edit, setEdit] = useState<CurrencyProps | null>(null)
@@ -16,6 +20,7 @@ export default function CurrencyList({ handlePage }: CurrencyListProps) {
   }, [])
 
   async function getStore() {
+    dispatch(setLoading(true))
     try {
       const { success, data } = await getCurrencyStoreApi()
 
@@ -24,17 +29,22 @@ export default function CurrencyList({ handlePage }: CurrencyListProps) {
       } else {
         setList([])
       }
+      dispatch(setLoading(false))
     } catch (error) {
       setList([])
+      dispatch(setLoading(false))
     }
   }
 
   async function deleteCurrency(id: number) {
+    dispatch(setLoading(true))
     try {
       const { success } = await deleteCurrencyApi(id)
 
       if (success) {
         getStore()
+      } else {
+        dispatch(setLoading(false))
       }
     } catch (error) {
       getStore()
@@ -43,6 +53,7 @@ export default function CurrencyList({ handlePage }: CurrencyListProps) {
 
 
   async function editCurrency() {
+    dispatch(setLoading(true))
     try {
       if (edit) {
         const { success } = await editCurrencyApi(edit)
@@ -50,6 +61,8 @@ export default function CurrencyList({ handlePage }: CurrencyListProps) {
         if (success) {
           setEdit(null)
           getStore()
+        } else {
+          dispatch(setLoading(false))
         }
       }
     } catch (error) {
@@ -185,3 +198,5 @@ export default function CurrencyList({ handlePage }: CurrencyListProps) {
     </div>
   )
 }
+
+export default memo(CurrencyList)

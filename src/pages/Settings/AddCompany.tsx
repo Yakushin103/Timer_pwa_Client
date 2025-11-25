@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 import SelectIdsComponent from "../../components/Select";
 
@@ -7,8 +7,9 @@ import { useAppDispatch } from "../../store/hooks";
 
 import { AddCompanyProps, CompaniesListOptionsProps } from "../../modules/pages/Settings";
 import { updatedCompanyListThunk } from "../../store/thunk";
+import { setLoading } from "../../store/reducer";
 
-export default function AddCompany({ handlePage }: AddCompanyProps) {
+function AddCompany({ handlePage }: AddCompanyProps) {
   const dispatch = useAppDispatch()
 
   const [options, setOptions] = useState<CompaniesListOptionsProps>({
@@ -28,23 +29,33 @@ export default function AddCompany({ handlePage }: AddCompanyProps) {
   }, [])
 
   async function getStore() {
+    dispatch(setLoading(true))
     try {
       const { success, data } = await getCompanyStoreApi()
 
       if (success) {
         setOptions(data)
       }
-    } catch (error) { }
+
+      dispatch(setLoading(false))
+    } catch (error) {
+      dispatch(setLoading(false))
+    }
   }
 
   async function handleAddCompany() {
+    dispatch(setLoading(true))
     try {
       const { success } = await addCompanyStoreApi(data)
       if (success) {
         dispatch(updatedCompanyListThunk(''))
         handlePage('companies_list')
       }
-    } catch (error) { }
+
+      dispatch(setLoading(false))
+    } catch (error) {
+      dispatch(setLoading(false))
+    }
   }
 
   function handleClear() {
@@ -145,3 +156,5 @@ export default function AddCompany({ handlePage }: AddCompanyProps) {
     </div>
   )
 }
+
+export default memo(AddCompany)

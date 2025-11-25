@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 import Icon from "../../components/Icon";
 import SelectComponent from "../../components/Select";
 
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { deleteCompanyApi, getCompanyStoreApi } from "../../api/companyApi";
+import { updatedCompanyListThunk } from "../../store/thunk";
+import { setLoading } from "../../store/reducer";
 
 import { CompanyProps } from "../../modules/api/Company";
 import { CompaniesListOptionsProps, CompaniesListProps } from "../../modules/pages/Settings";
-import { updatedCompanyListThunk } from "../../store/thunk";
 
-export default function CompaniesList({ handlePage }: CompaniesListProps) {
+function CompaniesList({ handlePage }: CompaniesListProps) {
   const dispatch = useAppDispatch()
 
   const companies = useAppSelector((store) => store.companies)
@@ -26,13 +27,17 @@ export default function CompaniesList({ handlePage }: CompaniesListProps) {
   }, [])
 
   async function getStore() {
+    dispatch(setLoading(true))
     try {
       const { success, data } = await getCompanyStoreApi()
 
       if (success) {
         setOptions(data)
       }
-    } catch (error) { }
+      dispatch(setLoading(false))
+    } catch (error) {
+      dispatch(setLoading(false))
+    }
   }
 
   async function editCompany() {
@@ -42,13 +47,17 @@ export default function CompaniesList({ handlePage }: CompaniesListProps) {
   }
 
   async function deleteCompany(id: number) {
+    dispatch(setLoading(true))
     try {
       const { success } = await deleteCompanyApi(id)
 
       if (success) {
         dispatch(updatedCompanyListThunk(''))
       }
-    } catch (error) { }
+      dispatch(setLoading(false))
+    } catch (error) {
+      dispatch(setLoading(false))
+    }
   }
 
   return (
@@ -461,3 +470,5 @@ export default function CompaniesList({ handlePage }: CompaniesListProps) {
     </div >
   )
 }
+
+export default memo(CompaniesList)

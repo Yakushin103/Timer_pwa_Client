@@ -1,12 +1,16 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 import Icon from "../../components/Icon";
 
 import { deletePaymentMethodApi, editPaymentMethodApi, getPaymentMethodStoreApi } from "../../api/paymentMethodApi";
+import { useAppDispatch } from "../../store/hooks";
+import { setLoading } from "../../store/reducer";
 
 import { PaymentMethodListProps, PaymentMethodProps } from "../../modules/pages/Settings";
 
-export default function PaymentMethodList({ handlePage }: PaymentMethodListProps) {
+function PaymentMethodList({ handlePage }: PaymentMethodListProps) {
+  const dispatch = useAppDispatch()
+
   const [list, setList] = useState<PaymentMethodProps[] | null>(null)
 
   const [edit, setEdit] = useState<PaymentMethodProps | null>(null)
@@ -16,6 +20,7 @@ export default function PaymentMethodList({ handlePage }: PaymentMethodListProps
   }, [])
 
   async function getStore() {
+    dispatch(setLoading(true))
     try {
       const { success, data } = await getPaymentMethodStoreApi()
 
@@ -24,17 +29,23 @@ export default function PaymentMethodList({ handlePage }: PaymentMethodListProps
       } else {
         setList([])
       }
+
+      dispatch(setLoading(false))
     } catch (error) {
       setList([])
+      dispatch(setLoading(false))
     }
   }
 
   async function deletePaymentMethod(id: number) {
+    dispatch(setLoading(true))
     try {
       const { success } = await deletePaymentMethodApi(id)
 
       if (success) {
         getStore()
+      } else {
+        dispatch(setLoading(false))
       }
     } catch (error) {
       getStore()
@@ -43,6 +54,7 @@ export default function PaymentMethodList({ handlePage }: PaymentMethodListProps
 
 
   async function editPaymentMethod() {
+    dispatch(setLoading(true))
     try {
       if (edit) {
         const { success } = await editPaymentMethodApi(edit)
@@ -50,6 +62,8 @@ export default function PaymentMethodList({ handlePage }: PaymentMethodListProps
         if (success) {
           setEdit(null)
           getStore()
+        } else {
+          dispatch(setLoading(false))
         }
       }
     } catch (error) {
@@ -195,3 +209,5 @@ export default function PaymentMethodList({ handlePage }: PaymentMethodListProps
     </div>
   )
 }
+
+export default memo(PaymentMethodList)
