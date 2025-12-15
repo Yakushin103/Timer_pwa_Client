@@ -13,6 +13,7 @@ type ArgProps = {
 // signOut
 export const signOut = createAsyncThunk(
   "user/signOut",
+  //@ts-ignore
   async (arg: ArgProps, { dispatch }) => {
     try {
       // let response = await httpClientUpdate.post("/logout");
@@ -31,6 +32,7 @@ export const signOut = createAsyncThunk(
 
 export const errorSignOut = createAsyncThunk(
   "user/signOut",
+  //@ts-ignore
   async (arg: "", { dispatch }) => {
     try {
       delete instance.defaults.headers["Authorization"];
@@ -49,6 +51,7 @@ export const errorSignOut = createAsyncThunk(
 
 export const updatedCompanyListThunk = createAsyncThunk(
   "company/updated",
+  //@ts-ignore
   async (arg: "", { dispatch }) => {
     try {
       const { success, data } = await getCompanyListApi();

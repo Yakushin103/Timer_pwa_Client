@@ -106,102 +106,278 @@ function PaymentMethodList({ handlePage }: PaymentMethodListProps) {
         </div>
       </div>
 
-      <div className="row">
-        {
-          list &&
-          <table className="table">
-            <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Period</th>
-              <th>Edit</th>
-              <th>Delete</th>
-            </tr>
+      {
+        !!list?.length &&
+        <div className="__show-on-wide">
+          <div className="row">
+            <table className="table">
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Period</th>
+                <th>Edit</th>
+                <th>Delete</th>
+              </tr>
 
+              {
+                list.map(item => (
+                  <tr key={item.id}>
+                    <td>
+                      {
+                        edit && edit.id === item.id ?
+                          <input
+                            type="text"
+                            className="input-text"
+                            value={edit.name}
+                            onChange={(event) => setEdit({ ...edit, name: event.target.value })}
+                          /> :
+                          item.name
+                      }
+                    </td>
+
+                    <td>
+                      {
+                        edit && edit.id === item.id ?
+                          <input
+                            type="text"
+                            className="input-text"
+                            value={edit.description}
+                            onChange={(event) => setEdit({ ...edit, description: event.target.value })}
+                          /> :
+                          item.description
+                      }
+                    </td>
+
+                    <td>
+                      {
+                        edit && edit.id === item.id ?
+                          <input
+                            type="text"
+                            className="input-text"
+                            value={edit.period}
+                            onChange={(event) => setEdit({ ...edit, period: event.target.value })}
+                          /> :
+                          item.period
+                      }
+                    </td>
+
+                    <td>
+                      {
+                        !!edit && edit.id === item.id &&
+                        <div
+                          className="action save"
+                          onClick={() => editPaymentMethod()}
+                        >
+                          <Icon
+                            icon="save-1"
+                          />
+                        </div>
+                      }
+
+                      {
+                        !edit &&
+                        <div
+                          className="action edit"
+                          onClick={() => setEdit(item)}
+                        >
+                          <Icon
+                            icon="pencil-1"
+                          />
+                        </div>
+                      }
+                    </td>
+
+                    <td>
+                      {
+                        !!edit && edit.id === item.id &&
+                        <div
+                          className="action delete"
+                          onClick={() => setEdit(null)}
+                        >
+                          <Icon
+                            icon="delete-1"
+                            viewBox="0 0 128 128"
+                          />
+                        </div>
+                      }
+
+                      {
+                        !edit &&
+                        <div
+                          className="action delete"
+                          onClick={() => deletePaymentMethod(item.id)}
+                        >
+                          <Icon
+                            icon="delete-1"
+                            viewBox="0 0 128 128"
+                          />
+                        </div>
+                      }
+                    </td>
+                  </tr>
+                ))
+              }
+            </table>
+          </div>
+        </div>
+      }
+
+      {
+        !!list?.length &&
+        <div className="__show-on-tablet">
+          <div className="row">
+            <table className="table">
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Period</th>
+                <th>Edit</th>
+                <th>Delete</th>
+              </tr>
+
+              {
+                list.map(item => (
+                  <tr key={item.id}>
+                    <td>
+                      {
+                        edit && edit.id === item.id ?
+                          <input
+                            type="text"
+                            className="input-text"
+                            value={edit.name}
+                            onChange={(event) => setEdit({ ...edit, name: event.target.value })}
+                          /> :
+                          item.name
+                      }
+                    </td>
+
+                    <td>
+                      {
+                        edit && edit.id === item.id ?
+                          <input
+                            type="text"
+                            className="input-text"
+                            value={edit.description}
+                            onChange={(event) => setEdit({ ...edit, description: event.target.value })}
+                          /> :
+                          item.description
+                      }
+                    </td>
+
+                    <td>
+                      {
+                        edit && edit.id === item.id ?
+                          <input
+                            type="text"
+                            className="input-text"
+                            value={edit.period}
+                            onChange={(event) => setEdit({ ...edit, period: event.target.value })}
+                          /> :
+                          item.period
+                      }
+                    </td>
+
+                    <td>
+                      {
+                        !!edit && edit.id === item.id &&
+                        <div
+                          className="action save"
+                          onClick={() => editPaymentMethod()}
+                        >
+                          <Icon
+                            icon="save-1"
+                          />
+                        </div>
+                      }
+
+                      {
+                        !edit &&
+                        <div
+                          className="action edit"
+                          onClick={() => setEdit(item)}
+                        >
+                          <Icon
+                            icon="pencil-1"
+                          />
+                        </div>
+                      }
+                    </td>
+
+                    <td>
+                      {
+                        !!edit && edit.id === item.id &&
+                        <div
+                          className="action delete"
+                          onClick={() => setEdit(null)}
+                        >
+                          <Icon
+                            icon="delete-1"
+                            viewBox="0 0 128 128"
+                          />
+                        </div>
+                      }
+
+                      {
+                        !edit &&
+                        <div
+                          className="action delete"
+                          onClick={() => deletePaymentMethod(item.id)}
+                        >
+                          <Icon
+                            icon="delete-1"
+                            viewBox="0 0 128 128"
+                          />
+                        </div>
+                      }
+                    </td>
+                  </tr>
+                ))
+              }
+            </table>
+          </div>
+        </div>
+      }
+
+      {
+        !!list?.length &&
+        <div className="__show-on-mobile">
+          <div className='table-mobile'>
             {
               list.map(item => (
-                <tr key={item.id}>
-                  <td>
-                    {
-                      edit && edit.id === item.id ?
-                        <input
-                          type="text"
-                          className="input-text"
-                          value={edit.name}
-                          onChange={(event) => setEdit({ ...edit, name: event.target.value })}
-                        /> :
-                        item.name
-                    }
-                  </td>
+                <div key={item.id} className="item">
+                  <div className="left">
+                    <div className='row-mobile'>
+                      <span className='name'>Name:</span>
 
-                  <td>
-                    {
-                      edit && edit.id === item.id ?
-                        <input
-                          type="text"
-                          className="input-text"
-                          value={edit.description}
-                          onChange={(event) => setEdit({ ...edit, description: event.target.value })}
-                        /> :
-                        item.description
-                    }
-                  </td>
+                      <span className='value'> {item.name} </span>
+                    </div>
 
-                  <td>
-                    {
-                      edit && edit.id === item.id ?
-                        <input
-                          type="text"
-                          className="input-text"
-                          value={edit.period}
-                          onChange={(event) => setEdit({ ...edit, period: event.target.value })}
-                        /> :
-                        item.period
-                    }
-                  </td>
+                    <div className='row-mobile'>
+                      <span className='name'>Description:</span>
 
-                  <td>
-                    {
-                      !!edit && edit.id === item.id &&
+                      <span className='value'> {item.description} </span>
+                    </div>
+
+                    <div className='row-mobile'>
+                      <span className='name'>Period:</span>
+
+                      <span className='value'> {item.period} </span>
+                    </div>
+                  </div>
+
+                  <div className="right">
+                    <div className='row-mobile'>
+                      <span className='name'>Edit:</span>
+
                       <div
                         className="action save"
-                        onClick={() => editPaymentMethod()}
                       >
-                        <Icon
-                          icon="save-1"
-                        />
                       </div>
-                    }
+                    </div>
 
-                    {
-                      !edit &&
-                      <div
-                        className="action edit"
-                        onClick={() => setEdit(item)}
-                      >
-                        <Icon
-                          icon="pencil-1"
-                        />
-                      </div>
-                    }
-                  </td>
+                    <div className='row-mobile'>
+                      <span className='name'>Delete:</span>
 
-                  <td>
-                    {
-                      !!edit && edit.id === item.id &&
-                      <div
-                        className="action delete"
-                        onClick={() => setEdit(null)}
-                      >
-                        <Icon
-                          icon="delete-1"
-                          viewBox="0 0 128 128"
-                        />
-                      </div>
-                    }
-
-                    {
-                      !edit &&
                       <div
                         className="action delete"
                         onClick={() => deletePaymentMethod(item.id)}
@@ -211,14 +387,14 @@ function PaymentMethodList({ handlePage }: PaymentMethodListProps) {
                           viewBox="0 0 128 128"
                         />
                       </div>
-                    }
-                  </td>
-                </tr>
+                    </div>
+                  </div>
+                </div>
               ))
             }
-          </table>
-        }
-      </div>
+          </div>
+        </div>
+      }
     </div>
   )
 }

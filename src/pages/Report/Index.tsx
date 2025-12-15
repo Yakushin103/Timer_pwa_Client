@@ -166,7 +166,7 @@ export default function Index() {
 
   return (
     <div className="content">
-      <div className="row sb">
+      <div className="row-buttons sb">
         <div>
           <SelectIdsComponent
             id={filters.company_id}

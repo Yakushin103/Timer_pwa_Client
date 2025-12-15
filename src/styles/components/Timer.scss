@@ -24,6 +24,12 @@
       font-size: 100px;
 
       text-align: center;
+
+      @media only screen and (max-width: 680.55px) {
+        width: 40px;
+
+        font-size: 40px;
+      }
     }
 
     span.time-popup {
@@ -33,6 +39,10 @@
 
       top: 30px;
       right: 5px;
+
+      @media only screen and (max-width: 680.55px) {
+        top: 10px;
+      }
     }
   }
 }

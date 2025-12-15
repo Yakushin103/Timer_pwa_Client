@@ -82,7 +82,7 @@ function ReportsList({ handlePage }: ReportsListProps) {
 
   return (
     <div className="companies-list">
-      <div className="row sb">
+      <div className="row-buttons sb">
         <div className="title">All Reports</div>
 
         <div className="row-action">

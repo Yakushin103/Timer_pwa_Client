@@ -71,7 +71,7 @@ function AddReport({ handlePage }: AddReportProps) {
         min_date: '',
         max_date: '',
       })
-      dispatch(setLoading(true))
+      dispatch(setLoading(false))
     }
   }
 
@@ -97,11 +97,11 @@ function AddReport({ handlePage }: AddReportProps) {
         }
       }
 
-      dispatch(setLoading(true))
+      dispatch(setLoading(false))
     } catch (error) {
       handleClear()
 
-      dispatch(setLoading(true))
+      dispatch(setLoading(false))
     }
   }
 
@@ -119,11 +119,11 @@ function AddReport({ handlePage }: AddReportProps) {
         }
       }
 
-      dispatch(setLoading(true))
+      dispatch(setLoading(false))
     } catch (error) {
       handleClear()
 
-      dispatch(setLoading(true))
+      dispatch(setLoading(false))
     }
   }
 
