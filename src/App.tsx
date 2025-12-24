@@ -8,14 +8,17 @@ import MainPage from './pages/Main/Index'
 import ReportPage from './pages/Report/Index'
 import SettingsPage from './pages/Settings/Index'
 import AuthPage from './pages/Auth/Index'
+// import UpdateNotification from './components/UpdateNotification'
+import UpdateNotifier from './components/UpdateNotif'
 
 import { getCompanyListApi } from './api/companyApi'
 import { useAppDispatch, useAppSelector } from './store/hooks'
 import { setAccessToken, setCompanies, setLoading } from './store/reducer'
-
-import './styles/App.scss'
 import { instance } from './api/instance'
 import { errorSignOut } from './store/thunk'
+import { usePWA } from './hooks/usePWA'
+
+import './styles/App.scss'
 
 function App() {
   const location = useLocation()
@@ -25,6 +28,12 @@ function App() {
 
   const loading = useAppSelector((store) => store.loading)
   const accessToken = useAppSelector((store) => store.accessToken)
+
+  const { checkForUpdates } = usePWA()
+
+  useEffect(() => {
+    checkForUpdates()
+  }, [checkForUpdates])
 
   useEffect(() => {
     if (!!accessToken) {
@@ -62,13 +71,19 @@ function App() {
     }
   }
 
-
   return (
     <div className="app">
       {
         loading &&
         <WatchLoader />
       }
+
+      {
+        location.pathname !== '/auth' &&
+        // <UpdateNotification />
+        <UpdateNotifier />
+      }
+
 
       {
         location.pathname === '/auth' &&

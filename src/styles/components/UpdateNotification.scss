@@ -1,0 +1,42 @@
+.updated-notification {
+  position: fixed;
+
+  width: 100%;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(to bottom, #5988e3, #684497);
+
+  z-index: 10;
+
+  .needs-refresh {
+    width: 200px;
+    height: 200px;
+
+    .flex-shrink-0 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .center {
+      width: 100%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}

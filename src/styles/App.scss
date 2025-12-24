@@ -251,6 +251,16 @@
       input[type="number"] {
         -moz-appearance: textfield;
       }
+
+      input[type="date"] {
+        /* Принудительно задаём размеры */
+        min-height: 20px; /* Минимальный размер для тач-устройств */
+        font-size: 16px; /* Предотвращает зум iOS */
+        
+        /* Для браузеров, которые поддерживают кастомный вид */
+        appearance: none;
+        -webkit-appearance: none;
+      }
     }
 
     .title {

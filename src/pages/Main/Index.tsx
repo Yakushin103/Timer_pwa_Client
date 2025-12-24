@@ -53,6 +53,17 @@ export default function Index() {
           minutes = data.minutes + item.minutes
           seconds = data.seconds + item.seconds
           id = item.id
+
+          if (seconds >= 60) {
+            minutes += Math.floor(seconds / 60);
+            seconds = seconds % 60;
+          }
+
+          // Обрабатываем минуты
+          if (minutes >= 60) {
+            hours += Math.floor(minutes / 60);
+            minutes = minutes % 60;
+          }
         }
       })
 
@@ -92,7 +103,7 @@ export default function Index() {
   async function getStore() {
     let date = moment().format('DD-MM-YYYY')
 
-    if ( !!accessToken ) {
+    if (!!accessToken) {
       instance.defaults.headers.common = {
         Authorization: `Bearer ${accessToken}`,
       };

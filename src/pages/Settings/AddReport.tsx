@@ -245,6 +245,7 @@ function AddReport({ handlePage }: AddReportProps) {
 
             <input
               type="date"
+              placeholder="Выберите дату"
               className="input-text-add"
               min={filters.min_date}
               max={filters.max_date}
@@ -258,6 +259,7 @@ function AddReport({ handlePage }: AddReportProps) {
 
             <input
               type="date"
+              placeholder="Выберите дату"
               className="input-text-add"
               disabled={!data.start_date}
               min={data.start_date}

@@ -1,13 +1,42 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Timer PWA + TS</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Timer</title>
+
+  <!-- ⭐⭐⭐ СКРИПТ РЕГИСТРАЦИИ SERVICE WORKER ⭐⭐⭐ -->
+  <script>
+    // Регистрация Service Worker
+    if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
+      console.log('🚀 Регистрация Service Worker...');
+
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js', {
+          scope: '/',
+          updateViaCache: 'none'
+        })
+          .then(registration => {
+            console.log('✅ SW зарегистрирован:', registration.scope);
+
+            // Автоматическая проверка обновлений
+            setInterval(() => {
+              registration.update();
+            }, 5 * 60 * 1000);
+          })
+          .catch(error => {
+            console.error('❌ Ошибка регистрации SW:', error);
+          });
+      });
+    }
+  </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>
