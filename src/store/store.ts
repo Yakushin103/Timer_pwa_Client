@@ -6,7 +6,7 @@ import {
 } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
 // import { thunk } from "redux-thunk";
-import logger from 'redux-logger'
+import logger from "redux-logger";
 import { persistReducer } from "redux-persist";
 // ...
 import crmReducer from "./reducer";
@@ -14,7 +14,7 @@ import crmReducer from "./reducer";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["accessToken"],
+  whitelist: ["accessToken", "selectedCompany", "start_time"],
 };
 
 const persistedReducer = persistReducer(persistConfig, crmReducer);

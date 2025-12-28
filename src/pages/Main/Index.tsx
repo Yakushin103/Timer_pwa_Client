@@ -1,16 +1,18 @@
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import classNames from 'classnames'
 //@ts-ignore
 import moment from 'moment'
 
 import SelectIdsComponent from '../../components/Select'
 import Timer from '../../components/Timer'
+import ModalSaveTime from '../../components/ModalSaveTime'
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { addTimeApi, getStoreApi, updatedTimeApi } from '../../api/timerApi'
 import { errorSignOut } from '../../store/thunk'
 import { instance } from '../../api/instance'
+import { setSelectedCompany, setStartTime } from '../../store/reducer'
 
 import { DataProps } from '../../modules/pages/Main'
 import { ItemStoreProps } from '../../modules/api/Timer'
@@ -22,24 +24,52 @@ export default function Index() {
 
   const companyOprions = useAppSelector((store) => store.companies)
   const accessToken = useAppSelector((store) => store.accessToken)
+  const selectedCompany = useAppSelector((store) => store.selectedCompany)
+  const startTime = useAppSelector((store) => store.start_time)
 
   const [isStart, setIsStart] = useState(false)
+  const [showModal, setShowModal] = useState(false)
 
   const [data, setData] = useState<DataProps>({
     day: '',
     seconds: 0,
     minutes: 0,
     hours: 0,
-    company_id: 0,
   })
   const [report, setReport] = useState<ItemStoreProps[]>([])
+  const [oldTime, setOldTime] = useState({
+    seconds: 0,
+    minutes: 0,
+    hours: 0,
+  })
 
   useEffect(() => {
     getStore()
   }, [])
 
+  useEffect(() => {
+    if (!!startTime) {
+      getSaveOldTime()
+    }
+  }, [])
+
+  function getSaveOldTime() {
+    const startMoment = moment(startTime);
+    const now = moment();
+    const duration = moment.duration(now.diff(startMoment));
+
+    setOldTime({
+      hours: Math.floor(duration.asHours()),
+      minutes: duration.minutes(),
+      seconds: duration.seconds()
+    })
+
+    setShowModal(true)
+  }
+
+
   async function saveTime() {
-    if (report.length && data.company_id) {
+    if (report.length && selectedCompany) {
       let day = ''
       let hours = 0
       let minutes = 0
@@ -47,7 +77,7 @@ export default function Index() {
       let id = 0
 
       report.forEach(item => {
-        if (item.company_id === data.company_id) {
+        if (item.company_id === selectedCompany) {
           day = item.day
           hours = data.hours + item.hours
           minutes = data.minutes + item.minutes
@@ -73,6 +103,7 @@ export default function Index() {
         hours,
         minutes,
         seconds,
+        company_id: selectedCompany,
         id,
       })
 
@@ -87,6 +118,7 @@ export default function Index() {
       const { success, message } = await addTimeApi({
         ...data,
         day: moment().format('DD-MM-YYYY'),
+        company_id: selectedCompany,
       })
 
       if (success) {
@@ -120,13 +152,77 @@ export default function Index() {
     }
   }
 
+  const handleSaveOldTime = useCallback(async () => {
+    if (report.length && selectedCompany) {
+      let day = ''
+      let hours = 0
+      let minutes = 0
+      let seconds = 0
+      let id = 0
+
+      report.forEach(item => {
+        if (item.company_id === selectedCompany) {
+          day = item.day
+          hours = oldTime.hours + item.hours
+          minutes = oldTime.minutes + item.minutes
+          seconds = oldTime.seconds + item.seconds
+          id = item.id
+
+          if (seconds >= 60) {
+            minutes += Math.floor(seconds / 60);
+            seconds = seconds % 60;
+          }
+
+          // Обрабатываем минуты
+          if (minutes >= 60) {
+            hours += Math.floor(minutes / 60);
+            minutes = minutes % 60;
+          }
+        }
+      })
+
+      const { success, message } = await updatedTimeApi({
+        ...oldTime,
+        day,
+        hours,
+        minutes,
+        seconds,
+        company_id: selectedCompany,
+        id,
+      })
+
+      if (success) {
+        handleCloseOldTimeModal()
+        getStore()
+      } else {
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        }
+      }
+    } else {
+      const { success, message } = await addTimeApi({
+        ...oldTime,
+        day: moment().format('DD-MM-YYYY'),
+        company_id: selectedCompany,
+      })
+
+      if (success) {
+        handleCloseOldTimeModal()
+        getStore()
+      } else {
+        if (message === 'Authorization is required') {
+          dispatch(errorSignOut(''))
+        }
+      }
+    }
+  }, [oldTime, report])
+
   function handleClearTime() {
     setData({
       day: '',
       seconds: 0,
       minutes: 0,
       hours: 0,
-      company_id: 0,
     })
     getStore()
   }
@@ -210,18 +306,71 @@ export default function Index() {
     return string
   }
 
+  function handleSelectCompany(value: number) {
+    dispatch(setSelectedCompany(value))
+  }
+
+  function handleStart() {
+    setIsStart(!isStart)
+
+    if (!isStart) {
+      dispatch(setStartTime(moment().toISOString()))
+    } else {
+      startTime && dispatch(setStartTime(null))
+    }
+  }
+
+  const handleTimerData = useCallback((new_data: DataProps) => {
+    setData({
+      ...new_data,
+    })
+  }, [])
+
+  const handleCloseOldTimeModal = useCallback(() => {
+    dispatch(setStartTime(null))
+    setOldTime({
+      seconds: 0,
+      minutes: 0,
+      hours: 0,
+    })
+    setShowModal(false)
+  }, [])
+
+  function getCompanyName() {
+    let name = ''
+
+    companyOprions.forEach(item => {
+      if (item.id === selectedCompany) {
+        name = item.name
+      }
+    })
+
+    return name
+  }
+
   return (
     <div className="content main-page">
+      {
+        showModal &&
+        <ModalSaveTime
+          hours={oldTime.hours}
+          minutes={oldTime.minutes}
+          seconds={oldTime.seconds}
+          handleClose={handleCloseOldTimeModal}
+          handleSave={handleSaveOldTime}
+          company_name={getCompanyName()}
+        />
+      }
       <div className='row'>
         <SelectIdsComponent
-          id={data.company_id}
+          id={selectedCompany}
           options={companyOprions.map(option => {
             return {
               id: option.id,
               name: option.name
             }
           })}
-          handleSelect={(value) => setData({ ...data, company_id: value as number })}
+          handleSelect={(value) => handleSelectCompany(value as number)}
         />
       </div>
 
@@ -230,7 +379,7 @@ export default function Index() {
       </div>
 
       <div>
-        <Timer isStart={isStart} data={data} setData={setData} />
+        <Timer isStart={isStart} data={data} setData={handleTimerData} />
       </div>
 
       <div className='button-start'>
@@ -238,8 +387,8 @@ export default function Index() {
           className={classNames({
             'resume': getNameButton() === 'Resume'
           })}
-          disabled={data.company_id === 0}
-          onClick={() => setIsStart(!isStart)}
+          disabled={selectedCompany === 0}
+          onClick={() => handleStart()}
         >
           {getNameButton()}
         </button>

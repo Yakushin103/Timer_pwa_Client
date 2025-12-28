@@ -3,7 +3,6 @@ export interface DataProps {
   seconds: number,
   minutes: number,
   hours: number,
-  company_id: number,
 }
 
 export interface DataUpdatedProps {
@@ -13,4 +12,12 @@ export interface DataUpdatedProps {
   hours: number,
   company_id: number,
   id: number
+}
+
+export interface AddTimeDataProps {
+  day: string,
+  seconds: number,
+  minutes: number,
+  hours: number,
+  company_id: number
 }

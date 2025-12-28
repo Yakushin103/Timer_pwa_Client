@@ -107,66 +107,70 @@ function ReportsList({ handlePage }: ReportsListProps) {
         <div className="__show-on-wide">
           <div className="row">
             <table className="table">
-              <tr>
-                <th>Company Name</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Payout</th>
-                <th>Is Payout</th>
-                <th>Create Date</th>
-                <th>Payout Date</th>
-                <th>Pay</th>
-                <th>Delete</th>
-              </tr>
+              <thead>
+                <tr>
+                  <th>Company Name</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Payout</th>
+                  <th>Is Payout</th>
+                  <th>Create Date</th>
+                  <th>Payout Date</th>
+                  <th>Pay</th>
+                  <th>Delete</th>
+                </tr>
+              </thead>
 
-              {
-                report.map(item => (
-                  <tr key={item.id}>
-                    <td> {item.company_name} </td>
+              <tbody>
+                {
+                  report.map(item => (
+                    <tr key={item.id}>
+                      <td> {item.company_name} </td>
 
-                    <td> {item.start_date} </td>
+                      <td> {item.start_date} </td>
 
-                    <td> {item.end_date} </td>
+                      <td> {item.end_date} </td>
 
-                    <td> {item.payout} </td>
+                      <td> {item.payout} </td>
 
-                    <td
-                      className={classNames({
-                        _green: item.is_payout,
-                        _red: !item.is_payout,
-                      })}
-                    > {item.is_payout ? 'Yes' : 'No'} </td>
+                      <td
+                        className={classNames({
+                          _green: item.is_payout,
+                          _red: !item.is_payout,
+                        })}
+                      > {item.is_payout ? 'Yes' : 'No'} </td>
 
-                    <td> {item.create_date} </td>
+                      <td> {item.create_date} </td>
 
-                    <td> {item.payout_date} </td>
+                      <td> {item.payout_date} </td>
 
-                    <td>
-                      <div
-                        className="action save"
-                        onClick={() => handlePayReport(item.id)}
-                      >
-                        <Icon
-                          viewBox='0 0 1024 1024'
-                          icon="pay-7"
-                        />
-                      </div>
-                    </td>
+                      <td>
+                        <div
+                          className="action save"
+                          onClick={() => handlePayReport(item.id)}
+                        >
+                          <Icon
+                            viewBox='0 0 1024 1024'
+                            icon="pay-7"
+                          />
+                        </div>
+                      </td>
 
-                    <td>
-                      <div
-                        className="action delete"
-                        onClick={() => deleteReport({ id: item.id, company_id: item.company_id, start_date: item.start_date, end_date: item.end_date })}
-                      >
-                        <Icon
-                          icon="delete-1"
-                          viewBox="0 0 128 128"
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              }
+                      <td>
+                        <div
+                          className="action delete"
+                          onClick={() => deleteReport({ id: item.id, company_id: item.company_id, start_date: item.start_date, end_date: item.end_date })}
+                        >
+                          <Icon
+                            icon="delete-1"
+                            viewBox="0 0 128 128"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                }
+              </tbody>
             </table>
           </div>
         </div>
@@ -177,76 +181,80 @@ function ReportsList({ handlePage }: ReportsListProps) {
         <div className="__show-on-tablet">
           <div className="row">
             <table className="table">
-              <tr>
-                <th>Company</th>
-                <th>Start / End Date</th>
-                <th>Payout / Is</th>
-                <th>Create / Payout Date</th>
-                <th>Pay / Delete</th>
-              </tr>
+              <thead>
+                <tr>
+                  <th>Company</th>
+                  <th>Start / End Date</th>
+                  <th>Payout / Is</th>
+                  <th>Create / Payout Date</th>
+                  <th>Pay / Delete</th>
+                </tr>
+              </thead>
 
-              {
-                report.map(item => (
-                  <tr key={item.id}>
-                    <td>
-                      <div className='col'>
-                        <div> {item.company_name} </div>
+              <tbody>
+                {
+                  report.map(item => (
+                    <tr key={item.id}>
+                      <td>
+                        <div className='col'>
+                          <div> {item.company_name} </div>
 
-                      </div>
-                    </td>
-
-                    <td>
-                      <div className='col'>
-                        <div> {item.start_date} </div>
-                        <div> {item.end_date} </div>
-                      </div>
-                    </td>
-
-                    <td>
-                      <div className='col'>
-                        <div> {item.payout} </div>
-                        <div
-                          className={classNames({
-                            _green: item.is_payout,
-                            _red: !item.is_payout,
-                          })}
-                        > {item.is_payout ? 'Yes' : 'No'} </div>
-                      </div>
-                    </td>
-
-                    <td>
-                      <div className='col'>
-                        <div> {item.create_date} </div>
-                        <div> {item.payout_date} </div>
-                      </div>
-                    </td>
-
-                    <td>
-                      <div className='col'>
-                        <div
-                          className="action save"
-                          onClick={() => handlePayReport(item.id)}
-                        >
-                          <Icon
-                            viewBox='0 0 1024 1024'
-                            icon="pay-7"
-                          />
                         </div>
+                      </td>
 
-                        <div
-                          className="action delete"
-                          onClick={() => deleteReport({ id: item.id, company_id: item.company_id, start_date: item.start_date, end_date: item.end_date })}
-                        >
-                          <Icon
-                            icon="delete-1"
-                            viewBox="0 0 128 128"
-                          />
+                      <td>
+                        <div className='col'>
+                          <div> {item.start_date} </div>
+                          <div> {item.end_date} </div>
                         </div>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              }
+                      </td>
+
+                      <td>
+                        <div className='col'>
+                          <div> {item.payout} </div>
+                          <div
+                            className={classNames({
+                              _green: item.is_payout,
+                              _red: !item.is_payout,
+                            })}
+                          > {item.is_payout ? 'Yes' : 'No'} </div>
+                        </div>
+                      </td>
+
+                      <td>
+                        <div className='col'>
+                          <div> {item.create_date} </div>
+                          <div> {item.payout_date} </div>
+                        </div>
+                      </td>
+
+                      <td>
+                        <div className='col'>
+                          <div
+                            className="action save"
+                            onClick={() => handlePayReport(item.id)}
+                          >
+                            <Icon
+                              viewBox='0 0 1024 1024'
+                              icon="pay-7"
+                            />
+                          </div>
+
+                          <div
+                            className="action delete"
+                            onClick={() => deleteReport({ id: item.id, company_id: item.company_id, start_date: item.start_date, end_date: item.end_date })}
+                          >
+                            <Icon
+                              icon="delete-1"
+                              viewBox="0 0 128 128"
+                            />
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                }
+              </tbody>
             </table>
           </div>
         </div>

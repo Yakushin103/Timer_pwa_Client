@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 
 import { TimerProps } from '../modules/components/Timer';
@@ -7,7 +7,7 @@ import { getFormat } from '../utils/funcs';
 
 import '../styles/components/Timer.scss'
 
-export default function Timer({ isStart, data, setData }: TimerProps) {
+function Timer({ isStart, data, setData }: TimerProps) {
   const {
     seconds,
     minutes,
@@ -62,3 +62,5 @@ export default function Timer({ isStart, data, setData }: TimerProps) {
     </div>
   )
 }
+
+export default memo(Timer)

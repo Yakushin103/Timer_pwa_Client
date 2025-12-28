@@ -1,0 +1,47 @@
+.modal-save-time {
+  position: fixed;
+
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 10;
+
+  background: linear-gradient(to bottom, #5988e3, #684497);
+
+  .block {
+    width: 200px;
+    height: 300px;
+
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 20px;
+
+    border: 1px solid #fff;
+    border-radius: 5px;
+
+    text-align: center;
+
+    .title {
+      text-align: center;
+    }
+
+    .empty {
+      margin: auto;
+    }
+
+    .buttons {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+
+      gap: 20px;
+    }
+  }
+}

@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks"
 import { addTimeApi, deleteTimeApi, getStoreApi, updatedTimeApi } from '../../api/timerApi'
 import { getFormat } from "../../utils/funcs"
 import { errorSignOut } from "../../store/thunk"
+import { setSelectedCompany } from "../../store/reducer"
 
 import { ItemStoreProps } from "../../modules/api/Timer"
 
@@ -19,11 +20,8 @@ export default function Index() {
   const dispatch = useAppDispatch()
 
   const companyOptions = useAppSelector((store) => store.companies)
+  const selectedCompany = useAppSelector((store) => store.selectedCompany)
 
-  const [filters, setFilters] = useState({
-    company_id: 0,
-    day: 'all'
-  })
   const [report, setReport] = useState<ItemStoreProps[]>([])
   const [total, setTotal] = useState('')
   const [editTime, setEditTime] = useState({
@@ -34,7 +32,6 @@ export default function Index() {
   })
   const [addTime, setAddTime] = useState({
     day: moment().format('YYYY-MM-DD'),
-    company_id: 0,
     hours: 0,
     minutes: 0,
     seconds: 0,
@@ -43,10 +40,10 @@ export default function Index() {
 
   useEffect(() => {
     getStore()
-  }, [filters.company_id])
+  }, [selectedCompany])
 
   async function getStore() {
-    const { success, data, total_time, message } = await getStoreApi(filters.day, !!filters.company_id ? filters.company_id : undefined)
+    const { success, data, total_time, message } = await getStoreApi("all", !!selectedCompany ? selectedCompany : undefined)
 
     if (success) {
       setReport(data)
@@ -77,7 +74,7 @@ export default function Index() {
       const { success, message } = await updatedTimeApi({
         ...editTime,
         day: '',
-        company_id: 0,
+        company_id: selectedCompany,
       })
 
       if (success) {
@@ -98,6 +95,7 @@ export default function Index() {
       const { success, message } = await addTimeApi({
         ...addTime,
         day,
+        company_id: selectedCompany,
       })
 
       if (success) {
@@ -148,7 +146,6 @@ export default function Index() {
   function handleCancelAdd() {
     setAddTime({
       day: moment().format('YYYY-MM-DD'),
-      company_id: 0,
       hours: 0,
       minutes: 0,
       seconds: 0,
@@ -159,9 +156,12 @@ export default function Index() {
   function handleAddTime() {
     setAddTime({
       ...addTime,
-      company_id: filters.company_id,
       is_open: true,
     })
+  }
+
+  function handleSelectCompany(company_id: number) {
+    dispatch(setSelectedCompany(company_id))
   }
 
   return (
@@ -169,14 +169,14 @@ export default function Index() {
       <div className="row-buttons sb">
         <div>
           <SelectIdsComponent
-            id={filters.company_id}
+            id={selectedCompany}
             options={companyOptions.map(option => {
               return {
                 id: option.id,
                 name: option.name
               }
             })}
-            handleSelect={(value) => setFilters({ ...filters, company_id: value as number })}
+            handleSelect={(value) => handleSelectCompany(value as number)}
           />
         </div>
 
@@ -440,14 +440,14 @@ export default function Index() {
             <span>Company</span>
 
             <SelectIdsComponent
-              id={addTime.company_id}
+              id={selectedCompany}
               options={companyOptions.map(option => {
                 return {
                   id: option.id,
                   name: option.name
                 }
               })}
-              handleSelect={(value) => setAddTime({ ...addTime, company_id: value as number })}
+              handleSelect={(value) => handleSelectCompany(value as number)}
             />
           </div>
 
@@ -514,7 +514,7 @@ export default function Index() {
 
           <button
             className="white save"
-            disabled={(!addTime.hours && !addTime.minutes && !addTime.seconds) || !addTime.company_id || !addTime.day}
+            disabled={(!addTime.hours && !addTime.minutes && !addTime.seconds) || !selectedCompany || !addTime.day}
             onClick={() => handleSaveAddTime()}
           >
             Add

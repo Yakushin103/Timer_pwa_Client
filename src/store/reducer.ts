@@ -10,6 +10,8 @@ export interface StoreState {
   user: UserProps | null;
   page: string;
   companies: CompanyProps[];
+  selectedCompany: number;
+  start_time: null | string;
   loading: boolean;
 }
 
@@ -20,6 +22,8 @@ const initialState: StoreState = {
   page: "",
   companies: [],
   loading: false,
+  selectedCompany: 0,
+  start_time: null,
 };
 
 export const counterSlice = createSlice({
@@ -38,13 +42,26 @@ export const counterSlice = createSlice({
     setCompanies: (store, action: PayloadAction<CompanyProps[]>) => {
       store.companies = action.payload;
     },
+    setSelectedCompany: (store, action: PayloadAction<number>) => {
+      store.selectedCompany = action.payload;
+    },
+    setStartTime: (store, action: PayloadAction<string | null>) => {
+      store.start_time = action.payload;
+    },
     setLoading: (store, action: PayloadAction<boolean>) => {
       store.loading = action.payload;
     },
   },
 });
 
-export const { setAccessToken, setUser, setPage, setCompanies, setLoading } =
-  counterSlice.actions;
+export const {
+  setAccessToken,
+  setUser,
+  setPage,
+  setCompanies,
+  setSelectedCompany,
+  setStartTime,
+  setLoading,
+} = counterSlice.actions;
 
 export default counterSlice.reducer;

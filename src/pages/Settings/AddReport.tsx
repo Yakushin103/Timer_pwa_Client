@@ -4,7 +4,7 @@ import SelectIdsComponent from '../../components/Select'
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { addReportApi, getReportSettingsStoreApi, getReportsStoreApi } from '../../api/reportsApi'
-import { setLoading } from '../../store/reducer'
+import { setLoading, setSelectedCompany } from '../../store/reducer'
 import { errorSignOut } from '../../store/thunk'
 
 import { AddReportProps } from '../../modules/pages/Settings'
@@ -13,12 +13,12 @@ function AddReport({ handlePage }: AddReportProps) {
   const dispatch = useAppDispatch()
 
   const companyOptions = useAppSelector((store) => store.companies)
+  const selectedCompany = useAppSelector((store) => store.selectedCompany)
 
   const [data, setData] = useState({
     start_date: '',
     end_date: '',
     payout: '',
-    company_id: 0,
     is_payout: false,
   })
 
@@ -37,11 +37,11 @@ function AddReport({ handlePage }: AddReportProps) {
   }, [])
 
   useEffect(() => {
-    if (!!data.company_id) {
+    if (!!selectedCompany) {
       getStoreWithFilters()
     }
 
-  }, [data.start_date, data.end_date, data.company_id])
+  }, [data.start_date, data.end_date, selectedCompany])
 
   async function getStore() {
     dispatch(setLoading(true))
@@ -78,17 +78,20 @@ function AddReport({ handlePage }: AddReportProps) {
   async function getStoreWithFilters() {
     dispatch(setLoading(true))
     try {
-      const { success, total_hours, total_payout, min_date, max_date, message } = await getReportSettingsStoreApi(data.company_id, data.start_date, data.end_date)
+      const { success, total_hours, total_payout, min_date, max_date, message } = await getReportSettingsStoreApi(selectedCompany, data.start_date, data.end_date)
 
       if (success) {
         setTotal({
           total_hours,
           total_payout,
         })
-        setFilters({
-          min_date,
-          max_date,
-        })
+
+        if (!!total_payout) {
+          setFilters({
+            min_date,
+            max_date,
+          })
+        }
       } else {
         if (message === 'Authorization is required') {
           dispatch(errorSignOut(''))
@@ -108,7 +111,7 @@ function AddReport({ handlePage }: AddReportProps) {
   async function handleAddReport() {
     dispatch(setLoading(true))
     try {
-      const { success, message } = await addReportApi(data)
+      const { success, message } = await addReportApi({ ...data, company_id: selectedCompany })
       if (success) {
         handlePage('reports')
       } else {
@@ -132,7 +135,6 @@ function AddReport({ handlePage }: AddReportProps) {
       start_date: '',
       end_date: '',
       payout: '',
-      company_id: 0,
       is_payout: false,
     })
     setTotal({
@@ -186,6 +188,10 @@ function AddReport({ handlePage }: AddReportProps) {
     }
   }
 
+  function handleSelectedCompany(company_id: number) {
+    dispatch(setSelectedCompany(company_id))
+  }
+
   return (
     <div className="companies-list">
       <div className="row-buttons sb">
@@ -211,14 +217,14 @@ function AddReport({ handlePage }: AddReportProps) {
           <span>Company</span>
 
           <SelectIdsComponent
-            id={data.company_id}
+            id={selectedCompany}
             options={companyOptions.map(option => {
               return {
                 id: option.id,
                 name: option.name
               }
             })}
-            handleSelect={(value) => setData({ ...data, company_id: value as number })}
+            handleSelect={(value) => handleSelectedCompany(value as number)}
           />
         </div>
 
@@ -238,7 +244,7 @@ function AddReport({ handlePage }: AddReportProps) {
       </div>
 
       {
-        !!data.company_id &&
+        !!selectedCompany &&
         <div className="row sb gap">
           <div className="field">
             <span>Date start</span>
@@ -274,7 +280,7 @@ function AddReport({ handlePage }: AddReportProps) {
       <div className="row-buttons gap flex-end">
         <button
           className="white delete"
-          disabled={(!data.start_date && !data.end_date) || !data.company_id || !data.payout}
+          disabled={(!data.start_date && !data.end_date) || !selectedCompany || !data.payout}
           onClick={() => handleClear()}
         >
           Clear
@@ -282,7 +288,7 @@ function AddReport({ handlePage }: AddReportProps) {
 
         <button
           className="white save"
-          disabled={(!data.start_date && !data.end_date) || !data.company_id || !data.payout}
+          disabled={(!data.start_date && !data.end_date) || !selectedCompany || !data.payout}
           onClick={() => handleAddReport()}
         >
           Save

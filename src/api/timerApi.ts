@@ -1,9 +1,9 @@
 import { instance } from "./instance";
 
-import { DataProps, DataUpdatedProps } from "../modules/pages/Main";
+import { AddTimeDataProps, DataUpdatedProps } from "../modules/pages/Main";
 import { AddTimeApiResponse, GetStoreApiResponse } from "../modules/api/Timer";
 
-export async function addTimeApi(data: DataProps) {
+export async function addTimeApi(data: AddTimeDataProps) {
   return await instance
     .post("/api/timer/add", {
       params: { ...data },
