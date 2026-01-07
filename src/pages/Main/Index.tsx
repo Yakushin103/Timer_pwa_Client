@@ -14,7 +14,7 @@ import { errorSignOut } from '../../store/thunk'
 import { instance } from '../../api/instance'
 import { setSelectedCompany, setStartTime } from '../../store/reducer'
 
-import { DataProps, IndexProps } from '../../modules/pages/Main'
+import { IndexProps } from '../../modules/pages/Main'
 import { ItemStoreProps } from '../../modules/api/Timer'
 
 import '../../styles/pages/Main.scss'
