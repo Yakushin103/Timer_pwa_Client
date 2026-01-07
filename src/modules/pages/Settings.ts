@@ -1,3 +1,7 @@
+export interface IndexProps {
+  time_string: string | null;
+}
+
 export interface CompaniesListProps {
   handlePage: (value: string) => void;
 }

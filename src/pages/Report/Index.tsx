@@ -5,6 +5,7 @@ import moment from "moment"
 
 import SelectIdsComponent from "../../components/Select"
 import Icon from "../../components/Icon"
+import TimeView from "../../components/TimeView"
 
 import { useAppDispatch, useAppSelector } from "../../store/hooks"
 import { addTimeApi, deleteTimeApi, getStoreApi, updatedTimeApi } from '../../api/timerApi'
@@ -13,10 +14,11 @@ import { errorSignOut } from "../../store/thunk"
 import { setSelectedCompany } from "../../store/reducer"
 
 import { ItemStoreProps } from "../../modules/api/Timer"
+import { IndexProps } from "../../modules/pages/Report"
 
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function Index() {
+export default function Index({ time_string }: IndexProps) {
   const dispatch = useAppDispatch()
 
   const companyOptions = useAppSelector((store) => store.companies)
@@ -166,6 +168,11 @@ export default function Index() {
 
   return (
     <div className="content">
+      {
+        time_string &&
+        <TimeView time_string={time_string} />
+      }
+
       <div className="row-buttons sb">
         <div>
           <SelectIdsComponent

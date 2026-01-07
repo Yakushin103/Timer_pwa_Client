@@ -1,3 +1,13 @@
+export interface IndexProps {
+  seconds: number,
+  minutes: number,
+  hours: number,
+  isStart: boolean
+  handleStart: (value: boolean) => void
+  data: DataProps
+  handleData: (value: DataProps) => void
+}
+
 export interface DataProps {
   day: string,
   seconds: number,

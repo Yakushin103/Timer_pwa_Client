@@ -14,12 +14,20 @@ import { errorSignOut } from '../../store/thunk'
 import { instance } from '../../api/instance'
 import { setSelectedCompany, setStartTime } from '../../store/reducer'
 
-import { DataProps } from '../../modules/pages/Main'
+import { DataProps, IndexProps } from '../../modules/pages/Main'
 import { ItemStoreProps } from '../../modules/api/Timer'
 
 import '../../styles/pages/Main.scss'
 
-export default function Index() {
+export default function Index({
+  seconds,
+  minutes,
+  hours,
+  isStart,
+  handleStart,
+  data,
+  handleData,
+}: IndexProps) {
   const dispatch = useAppDispatch()
 
   const companyOprions = useAppSelector((store) => store.companies)
@@ -27,15 +35,8 @@ export default function Index() {
   const selectedCompany = useAppSelector((store) => store.selectedCompany)
   const startTime = useAppSelector((store) => store.start_time)
 
-  const [isStart, setIsStart] = useState(false)
   const [showModal, setShowModal] = useState(false)
 
-  const [data, setData] = useState<DataProps>({
-    day: '',
-    seconds: 0,
-    minutes: 0,
-    hours: 0,
-  })
   const [report, setReport] = useState<ItemStoreProps[]>([])
   const [oldTime, setOldTime] = useState({
     seconds: 0,
@@ -48,7 +49,7 @@ export default function Index() {
   }, [])
 
   useEffect(() => {
-    if (!!startTime) {
+    if (!!startTime && !isStart) {
       getSaveOldTime()
     }
   }, [])
@@ -218,7 +219,7 @@ export default function Index() {
   }, [oldTime, report])
 
   function handleClearTime() {
-    setData({
+    handleData({
       day: '',
       seconds: 0,
       minutes: 0,
@@ -310,8 +311,8 @@ export default function Index() {
     dispatch(setSelectedCompany(value))
   }
 
-  function handleStart() {
-    setIsStart(!isStart)
+  function handleStartTime() {
+    handleStart(!isStart)
 
     if (!isStart) {
       dispatch(setStartTime(moment().toISOString()))
@@ -319,12 +320,6 @@ export default function Index() {
       startTime && dispatch(setStartTime(null))
     }
   }
-
-  const handleTimerData = useCallback((new_data: DataProps) => {
-    setData({
-      ...new_data,
-    })
-  }, [])
 
   const handleCloseOldTimeModal = useCallback(() => {
     dispatch(setStartTime(null))
@@ -379,7 +374,11 @@ export default function Index() {
       </div>
 
       <div>
-        <Timer isStart={isStart} data={data} setData={handleTimerData} />
+        <Timer
+          seconds={seconds}
+          minutes={minutes}
+          hours={hours}
+        />
       </div>
 
       <div className='button-start'>
@@ -388,7 +387,7 @@ export default function Index() {
             'resume': getNameButton() === 'Resume'
           })}
           disabled={selectedCompany === 0}
-          onClick={() => handleStart()}
+          onClick={() => handleStartTime()}
         >
           {getNameButton()}
         </button>

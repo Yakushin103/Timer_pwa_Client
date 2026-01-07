@@ -13,10 +13,13 @@ import AddPaymentMethod from './AddPaymentMethod'
 import AddReport from './AddReport'
 import AddUser from './AddUser'
 import AddRole from './AddRole'
+import TimeView from '../../components/TimeView'
+
+import { IndexProps } from '../../modules/pages/Settings'
 
 import '../../styles/pages/Settings.scss'
 
-function Index() {
+function Index({ time_string }: IndexProps) {
   const [page, setPage] = useState('')
 
   function handlePage(name: string) {
@@ -29,6 +32,10 @@ function Index() {
       {
         page === '' &&
         <div className="content settings">
+          {
+            time_string &&
+            <TimeView time_string={time_string} />
+          }
           <button
             className='white'
             onClick={() => handlePage('companies_list')}

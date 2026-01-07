@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
 
@@ -9,6 +10,19 @@ export default function NavMenu() {
   const navigate = useNavigate()
   const location = useLocation()
 
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 680)
+    }
+
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
   function handleNavigate(name: string) {
     navigate(name)
   }
@@ -17,7 +31,7 @@ export default function NavMenu() {
     <>
       <div className="__show-on-wide nav">
         <button
-          className={classNames({ _active: location.pathname === '/' })}
+          className={classNames({ _active: location.pathname === '/', _liquid: isMobile })}
           onClick={() => handleNavigate('')}
         >
           Your time
@@ -29,7 +43,7 @@ export default function NavMenu() {
         </button>
 
         <button
-          className={classNames({ _active: location.pathname === '/report' })}
+          className={classNames({ _active: location.pathname === '/report', _liquid: isMobile })}
           onClick={() => handleNavigate('report')}
         >
           List
@@ -41,7 +55,7 @@ export default function NavMenu() {
         </button>
 
         <button
-          className={classNames({ _active: location.pathname === '/settings' })}
+          className={classNames({ _active: location.pathname === '/settings', _liquid: isMobile })}
           onClick={() => handleNavigate('settings')}
         >
           Settings
@@ -93,7 +107,7 @@ export default function NavMenu() {
 
       <div className="__show-on-mobile nav">
         <button
-          className={classNames({ _active: location.pathname === '/' })}
+          className={classNames({ _active: location.pathname === '/', _liquid: true })}
           onClick={() => handleNavigate('')}
         >
           <Icon
@@ -103,7 +117,7 @@ export default function NavMenu() {
         </button>
 
         <button
-          className={classNames({ _active: location.pathname === '/report' })}
+          className={classNames({ _active: location.pathname === '/report', _liquid: true })}
           onClick={() => handleNavigate('report')}
         >
           <Icon
@@ -113,7 +127,7 @@ export default function NavMenu() {
         </button>
 
         <button
-          className={classNames({ _active: location.pathname === '/settings' })}
+          className={classNames({ _active: location.pathname === '/settings', _liquid: true })}
           onClick={() => handleNavigate('settings')}
         >
           <Icon
